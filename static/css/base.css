@@ -1,0 +1,64 @@
+:root{
+    --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+* {
+    font-family: var(--bs-font-sans-serif);
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+
+    background-color: #333333;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 37.5% 25% 37.5%;
+}
+
+#main-body {
+    text-align: center;
+}
+
+#login-form {
+    background-color: #212529;
+    border-radius: 15px;
+    margin-top: 2rem;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: white;
+}
+
+.form-block {
+    display: grid;
+    grid-template-columns: 100%;
+    margin-bottom: 2rem;
+}
+
+.login-input {
+    border-radius: 7px;
+    padding: 0.7rem 1rem;
+    font-size: 1.25rem;
+}
+
+#login-form-logo {
+    width: 300px;
+}
+
+#login_button {
+    background-color: #212529;
+    color: white;
+    border: 1px solid white;
+    font-size: 1.25rem;
+    border-radius: 0.3rem;
+    padding: 0.7rem 2rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+#login_button:hover {
+    background-color: white;
+    color: #212529;
+}
