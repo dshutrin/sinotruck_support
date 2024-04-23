@@ -25,3 +25,8 @@ def login_view(request):
 
 		else:
 			return render(request, 'main/login.html')
+
+
+def logout_view(request):
+	user_logout(request)
+	return HttpResponseRedirect('/login')
