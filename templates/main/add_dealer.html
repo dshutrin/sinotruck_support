@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block navbar %}
+    <h1>Добавление дилера</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="form-block">
+        <div class="filler"></div>
+        <form method="post">
+            <div class="inputarea">
+                <input id="username" type="text" name="username" required>
+                <div class="labelline" for="username">Имя пользователя</div>
+            </div>
+            <div class="inputarea">
+                <input id="password" type="text" name="password" required>
+                <div class="labelline" for="password">Пароль</div>
+            </div>
+            <div class="button-block">
+                <button id="submit-button" type="submit">Добавить</button>
+            </div>
+            {% csrf_token %}
+        </form>
+        <div class="filler"></div>
+    </div>
+
+
+{% endblock %}

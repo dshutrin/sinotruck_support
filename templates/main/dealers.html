@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+
+{% block navbar %}
+    <h1>Дилеры</h1>
+{% endblock %}
+
+{% block content %}
+
+    {% if request.user.role == 'ADMIN' %}
+        <div class="add-manager-block">
+            <a href="/dealers/add">
+                <button id="add-manager-button">Добавить нового дилера</button>
+            </a>
+        </div>
+    {% endif %}
+
+    {% if dealers_count > 0 %}
+        <table class="users-table">
+            <thead><tr>
+                <th class="del-td"></th>
+                <th class="del-td"></th>
+                <th>Имя пользователя</th>
+                <th>Пароль</th>
+            </tr></thead>
+            <tbody>
+                {% for dealer in dealers %}
+                    <tr>
+                        <td class="del-td"></td>
+                        <td class="del-td"></td>
+                        <td>{{ dealer.username }}</td>
+                        <td>{{ dealer.clear_password }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h1 class="not-found">Дилеры не найдены!</h1>
+    {% endif %}
+{% endblock %}

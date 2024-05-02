@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+
+{% block navbar %}
+    <h1>Документы</h1>
+{% endblock %}
+
+{% block content %}
+
+    {% if files_count > 0 %}
+        <div class="files-block">
+
+            {% for doc in files %}
+                <div class="doc">
+                    <div class="doc-title">
+                        {{ doc.title }}
+                    </div>
+                    <div class="doc-link-block">
+                        <a target="_blank" href="/files/{{ doc.id }}">Открыть</a>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    {% else %}
+
+    {% endif %}
+
+{% endblock %}

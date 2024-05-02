@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+
+{% block navbar %}
+    <h1>Менеджеры</h1>
+{% endblock %}
+
+{% block content %}
+    {% if request.user.role == 'ADMIN' %}
+        <div class="add-manager-block">
+            <a href="/managers/add">
+                <button id="add-manager-button">Добавить нового менеджера</button>
+            </a>
+        </div>
+    {% endif %}
+
+    {% if manager_count > 0 %}
+        <table class="users-table">
+            <thead><tr>
+                <th class="del-td"></th>
+                <th class="del-td"></th>
+                <th>Имя пользователя</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Пароль</th>
+                <th>Задача</th>
+            </tr></thead>
+            <tbody>
+                {% for manager in managers %}
+                    <tr>
+                        <td class="del-td"></td>
+                        <td class="del-td"></td>
+                        <td>{{ manager.username }}</td>
+                        <td>{{ manager.name }}</td>
+                        <td>{{ manager.surname }}</td>
+                        <td>{{ manager.clear_password }}</td>
+                        <td>
+                            {% if manager.sub_role %}
+                                {{ manager.sub_role }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h1 class="not-found">Дилеры не найдены!</h1>
+    {% endif %}
+
+{% endblock %}

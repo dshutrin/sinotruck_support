@@ -77,6 +77,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+AUTH_USER_MODEL = 'sinotruk.CustomUser'
+
 STATIC_URL = 'static/'
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
