@@ -19,7 +19,7 @@ a {
     text-decoration: none;
 }
 
-.container {
+.login-container {
     display: grid;
     grid-template-columns: 37.5% 25% 37.5%;
 }
@@ -47,6 +47,7 @@ a {
     border-radius: 7px;
     padding: 0.7rem 1rem;
     font-size: 1.25rem;
+    color: black;
 }
 
 #login-form-logo {
@@ -160,8 +161,8 @@ li:hover > a {
 .content {
     height: calc(99vh - 60px - 2rem);
     max-height: calc(99vh - 60px - 2rem);
-    padding: 1rem;
-    width: calc(83vw - 2rem);
+    padding: 1rem 0;
+    width: calc(83vw - 1rem);
     overflow-y: scroll;
 }
 
@@ -219,7 +220,7 @@ li:hover > a {
     cursor: pointer;
 }
 
-.form-block {
+.forma-block {
     margin-top: 10%;
     display: grid;
     grid-template-columns: 33% 34% 33%;
@@ -232,7 +233,7 @@ li:hover > a {
     line-height: 50px;
 }
 
-input {
+.form-control-input {
     position: absolute;
     width: calc(100% - 2rem - 4px);
     padding: 0 1rem;
@@ -259,8 +260,8 @@ input {
     font-size: 20px;
 }
 
-input:focus + .labelline,
-input:valid + .labelline {
+.form-control-input:focus + .labelline,
+.form-control-input:valid + .labelline {
     transform: translateY(-5px) scale(0.88);
     font-size: 16px;
     line-height: 30px;
@@ -323,4 +324,129 @@ input:valid + .labelline {
     background-color: #6baafd;
     border-radius: 5px;
     padding: 0.1rem 0.5rem;
+}
+
+.home-info-blocks {
+    display: flex;
+    flex-direction: row;
+}
+
+.managers-count, .dealers-count, .clients-count {
+    background-color: #212529;
+    height: 100px;
+    color: #e4efff;
+
+    margin: 0 0.5rem;
+    border-radius: 15px;
+    padding: 0.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 33%;
+}
+
+.add-file-block {
+    display: grid;
+    grid-template-columns: 33% 34% 33%;
+}
+
+.mini-link {
+    color: #2f89ff;
+    font-size: 12px;
+}
+
+.add-file-block > form {
+    margin-top: 30%;
+}
+
+.form-control {
+    width: calc(100% - 2rem);
+    padding: 0.5rem 1rem;
+    font-size: 20px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    color: black;
+}
+
+input[type=file] {
+    display: none;
+}
+
+#choice_file {
+    width: calc(100% - 2rem - 4px);
+    padding: 0 1rem;
+    font-size: 20px;
+    display: block;
+    border-radius: 10px;
+    outline: none;
+    text-align: center;
+    border: 2px solid #e4efff;
+    color: #e4efff;
+}
+
+#file_button {
+    color: #e4efff;
+    border: 2px solid #e4efff;
+    width: calc(100%);
+    padding: 0.5rem 1rem;
+    background: transparent;
+    font-size: 18px;
+    border-radius: 10px;
+}
+
+#user_modal {
+    position: fixed;
+    top: 30vh;
+    left: 30vw;
+    width: 40vw;
+    height: 20vh;
+    background-color: #e4efff;
+    box-shadow: 0 0 10px 10px black;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#modal-text {
+    color: black;
+}
+
+#cancel_rm_user, #confirm_rm_user {
+    padding: 0.5rem 3rem;
+    border-radius: 7px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#cancel_rm_user {
+    background-color: #2f89ff;
+}
+
+#confirm_rm_user {
+    background-color: #ff2f5e;
+}
+
+.rm_button {
+    background-color: #ff2f5e;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.edit_button {
+    background-color: #2f89ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 0.1rem 1rem;
+    border-radius: 5px;
 }

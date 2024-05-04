@@ -1,0 +1,31 @@
+{% extends 'main/base.html' %}
+
+{% block navbar %}
+    <h1>Добавление файлов</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="add-file-block">
+
+        <div class="filler"></div>
+        <form method="post" enctype="multipart/form-data">
+
+            {% for f in form %}
+
+                <div class="inputarea">
+                    {{f}}
+                    {% if f.name == 'document' %}
+                        <label id="choice_file" for="{{ f.id_for_label }}">Выбрать файл</label>
+                    {% endif %}
+                </div>
+
+            {% endfor %}
+            {% csrf_token %}
+            <button id="file_button" type="submit">Добавить</button>
+        </form>
+        <div class="filler"></div>
+
+    </div>
+
+{% endblock %}

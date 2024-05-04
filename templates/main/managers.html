@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block navbar %}
     <h1>Менеджеры</h1>
@@ -27,8 +28,12 @@
             <tbody>
                 {% for manager in managers %}
                     <tr>
-                        <td class="del-td"></td>
-                        <td class="del-td"></td>
+                        <td class="del-td">
+                            <button type="button" class="mini-link rm_button" onclick="show_confirm_delete_user_modal({{ manager.id }})">Delete</button>
+                        </td>
+                        <td class="del-td">
+                            <a class="mini-link edit_button" href="/edituser/{{ manager.id }}">Edit</a>
+                        </td>
                         <td>{{ manager.username }}</td>
                         <td>{{ manager.name }}</td>
                         <td>{{ manager.surname }}</td>
@@ -45,5 +50,15 @@
     {% else %}
         <h1 class="not-found">Дилеры не найдены!</h1>
     {% endif %}
+
+    <script src="{% static 'js/users_functions.js' %}"></script>
+
+    <div id="user_modal" style="display: none;">
+        <h4 id="modal-text"></h4>
+        <div id="user-modal-buttons-block">
+            <button id="cancel_rm_user" onclick="document.getElementById('user_modal').style.display = 'none'" type="button">Нет</button>
+            <button id="confirm_rm_user" type="button">Да</button>
+        </div>
+    </div>
 
 {% endblock %}

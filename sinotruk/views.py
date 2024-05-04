@@ -1,7 +1,10 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login as user_login, logout as user_logout
-from django.http import FileResponse
+from django.http import FileResponse, JsonResponse
 from .models import *
+from .forms import *
+from django.views.decorators.csrf import csrf_exempt
+import IP2Location
 
 
 def login_view(request):
@@ -29,9 +32,33 @@ def logout_view(request):
 
 
 def home(request):
+
 	if request.user.is_authenticated:
-		return render(request, 'main/home.html')
+		return render(request, 'main/home.html', {
+			'managers_count': CustomUser.objects.filter(role='MANAGER').count(),
+			'dealers_count': CustomUser.objects.filter(role='DEALER').count(),
+			'clients_count': CustomUser.objects.filter(role='CLIENT').count()
+		})
 	return HttpResponseRedirect('/login')
+
+
+@csrf_exempt
+def get_user_details(request, user_id):
+	if request.user.is_authenticated:
+		user = CustomUser.objects.get(id=user_id)
+
+		return JsonResponse({
+			'username': user.username,
+		}, status=200)
+
+
+@csrf_exempt
+def delete_user(request, user_id):
+	if request.user.is_authenticated:
+		user = CustomUser.objects.get(id=user_id)
+		user.delete()
+
+		return JsonResponse({}, status=200)
 
 
 def managers(request):
@@ -109,8 +136,32 @@ def files(request):
 	})
 
 
+def add_file(request):
+	if request.method == 'POST':
+
+		form = AddFileForm(request.POST, request.FILES)
+		if form.is_valid():
+			file = form.save()
+
+			Activity.objects.create(
+				user=request.user,
+				ip=request.META['REMOTE_ADDR'],
+				action=f'Загрузка файла "{file.title}"'
+			)
+
+			return HttpResponseRedirect('/files/' + str(file.id))
+	else:
+		return render(request, 'main/add_file.html', {'form': AddFileForm()})
+
+
 def get_document(request, doc_id):
 	file = Document.objects.get(id=doc_id)
+
+	Activity.objects.create(
+		user=request.user,
+		ip=request.META['REMOTE_ADDR'],
+		action=f'Скачивание файла "{file.title}"'
+	)
 
 	return FileResponse(file.document)
 

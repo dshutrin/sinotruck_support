@@ -26,6 +26,7 @@ class CustomUser(AbstractBaseUser):
 
 	role = models.CharField(verbose_name='Роль', max_length=150, null=True, default='CLIENT', choices=ROLES_CHOICES)
 	sub_role = models.CharField(verbose_name='', max_length=100, null=True, default=None)
+	dealer_name = models.CharField(verbose_name='', max_length=255, null=True, default=None)
 
 	objects = CustomUserManager()
 	USERNAME_FIELD = 'username'
@@ -64,3 +65,14 @@ class Document(models.Model):
 	class Meta:
 		verbose_name = 'Документ'
 		verbose_name_plural = 'Документы'
+
+
+class Activity(models.Model):
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Пользователь')
+	action = models.CharField(verbose_name='Действие', max_length=150)
+	ip = models.CharField(verbose_name='IP', max_length=150, default=None, null=True, blank=True)
+	time = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		verbose_name = 'Активность'
+		verbose_name_plural = 'Активности'

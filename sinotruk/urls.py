@@ -18,6 +18,10 @@ urlpatterns = [
 
     path('files', files),
     path('files/<int:doc_id>', get_document),
+    path('files/add', add_file),
+
+    path('users/<int:user_id>', get_user_details),
+    path('users/<int:user_id>/delete', delete_user),
 
     path('activity', activity),
 ]

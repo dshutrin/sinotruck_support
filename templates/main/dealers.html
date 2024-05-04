@@ -20,14 +20,24 @@
                 <th class="del-td"></th>
                 <th class="del-td"></th>
                 <th>Имя пользователя</th>
+                <th>Фирма</th>
                 <th>Пароль</th>
             </tr></thead>
             <tbody>
                 {% for dealer in dealers %}
                     <tr>
-                        <td class="del-td"></td>
-                        <td class="del-td"></td>
+                        <td class="del-td">
+                            <a class="mini-link" href="/rmuser/{{ dealer.id }}">Delete</a>
+                        </td>
+                        <td class="del-td">
+                            <a class="mini-link" href="/edituser/{{ dealer.id }}">Edit</a>
+                        </td>
                         <td>{{ dealer.username }}</td>
+                        <td>
+                            {% if dealer.dealer_name %}
+                                {{ dealer.dealer_name }}
+                            {% endif %}
+                        </td>
                         <td>{{ dealer.clear_password }}</td>
                     </tr>
                 {% endfor %}
