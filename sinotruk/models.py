@@ -25,15 +25,16 @@ class CustomUser(AbstractBaseUser):
 	clear_password = models.CharField(max_length=255, null=True, default=None)
 
 	role = models.CharField(verbose_name='Роль', max_length=150, null=True, default='CLIENT', choices=ROLES_CHOICES)
-	sub_role = models.CharField(verbose_name='', max_length=100, null=True, default=None)
-	dealer_name = models.CharField(verbose_name='', max_length=255, null=True, default=None)
+	sub_role = models.CharField(verbose_name='Задача', max_length=100, null=True, default=None)
+	dealer_name = models.CharField(verbose_name='Фирма', max_length=255, null=True, default=None)
 
 	objects = CustomUserManager()
 	USERNAME_FIELD = 'username'
 
-	def set_password(self, password):
-		self.clear_password = password
+	def custom_set_password(self, password):
 		super().set_password(password)
+		self.clear_password = password
+		self.save()
 
 	def has_perm(self, perm, obj=None):
 		return self.is_superuser
@@ -61,6 +62,7 @@ class Document(models.Model):
 	document = models.FileField(upload_to='documents', verbose_name='Файл')
 	owner = models.CharField(verbose_name='Владелец', max_length=150, null=True, default=None, blank=True)
 	last_modified = models.DateTimeField(auto_now=True)
+	file_type = models.CharField(max_length=10, null=True, default=None, verbose_name='Тип документа')
 
 	class Meta:
 		verbose_name = 'Документ'
@@ -72,6 +74,7 @@ class Activity(models.Model):
 	action = models.CharField(verbose_name='Действие', max_length=150)
 	ip = models.CharField(verbose_name='IP', max_length=150, default=None, null=True, blank=True)
 	time = models.DateTimeField(auto_now_add=True)
+	place = models.CharField(verbose_name='Местоположение', max_length=150, null=True, default=None, blank=True)
 
 	class Meta:
 		verbose_name = 'Активность'

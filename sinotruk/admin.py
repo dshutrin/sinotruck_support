@@ -15,5 +15,5 @@ class DocumentAdmin(admin.ModelAdmin):
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('user', 'action', 'time', 'ip',)
-    readonly_fields = ('user', 'action', 'time', 'ip', )
+    list_display = ('user', 'action', 'time', 'ip', 'place')
+    readonly_fields = ('user', 'action', 'time', 'ip', 'place')

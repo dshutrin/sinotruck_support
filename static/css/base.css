@@ -298,12 +298,30 @@ li:hover > a {
     background-color: #7c7c7c;
     border-radius: 10px;
     padding: 1rem;
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+
+.doc-additional {
+    margin: 0.5rem;
+    width: calc(100% - 3rem);
+    background-color: #7c7c7c;
+    border-radius: 10px;
+    padding: 1rem;
     display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: space-between;
-    align-items: stretch;
+    align-items: center;
+    justify-content: center;
+}
+
+.doc-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.doc > .doc-image > img {
+    width: 50px;
 }
 
 .doc-title {
@@ -385,6 +403,11 @@ input[type=file] {
     text-align: center;
     border: 2px solid #e4efff;
     color: #e4efff;
+    overflow-x: scroll;
+}
+
+#choice_file::-webkit-scrollbar {
+    display: none;
 }
 
 #file_button {
@@ -440,6 +463,16 @@ input[type=file] {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    padding: 0.1rem 1rem;
+}
+
+.history_button {
+    background-color: #fff259;
+    color: black;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 0.1rem 1rem;
 }
 
 .edit_button {
@@ -449,4 +482,42 @@ input[type=file] {
     cursor: pointer;
     padding: 0.1rem 1rem;
     border-radius: 5px;
+}
+
+.user-edit-block {
+    display: grid;
+    grid-template-columns: 33% 34% 33%;
+}
+
+.user-edit-block > form > .inputarea > select {
+    position: absolute;
+    width: 100%;
+    height: 50px;
+    padding: 0 1rem;
+    line-height: 3rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    border: 2px solid #e4efff;
+    outline: none;
+    font-size: 20px;
+    background: transparent;
+    transition: 0.1s ease;
+    z-index: 1111;
+}
+
+.user-edit-block > form > .inputarea > select > option {
+    color: black;
+}
+
+#confirm-edit-user-button {
+    background-color: #2f89ff;
+    color: white;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    font-size: 20px;
+    border-radius: 5px;
+    margin-top: 1rem;
 }

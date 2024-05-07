@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block navbar %}
     <h1>Дилеры</h1>
@@ -27,10 +28,10 @@
                 {% for dealer in dealers %}
                     <tr>
                         <td class="del-td">
-                            <a class="mini-link" href="/rmuser/{{ dealer.id }}">Delete</a>
+                            <button type="button" class="mini-link rm_button" onclick="show_confirm_delete_user_modal({{ dealer.id }})">Delete</button>
                         </td>
                         <td class="del-td">
-                            <a class="mini-link" href="/edituser/{{ dealer.id }}">Edit</a>
+                            <a class="mini-link edit_button" href="/edituser/{{ dealer.id }}">Edit</a>
                         </td>
                         <td>{{ dealer.username }}</td>
                         <td>
@@ -46,4 +47,16 @@
     {% else %}
         <h1 class="not-found">Дилеры не найдены!</h1>
     {% endif %}
+
+
+    <script src="{% static 'js/users_functions.js' %}"></script>
+
+    <div id="user_modal" style="display: none;">
+        <h4 id="modal-text"></h4>
+        <div id="user-modal-buttons-block">
+            <button id="cancel_rm_user" onclick="document.getElementById('user_modal').style.display = 'none'" type="button">Нет</button>
+            <button id="confirm_rm_user" type="button">Да</button>
+        </div>
+    </div>
+
 {% endblock %}

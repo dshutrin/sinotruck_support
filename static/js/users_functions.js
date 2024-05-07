@@ -7,9 +7,7 @@ function rm_user(user_id) {
 
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-
             window.location.reload();
-
         }
     }
 

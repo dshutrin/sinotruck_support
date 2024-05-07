@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+
+{% block navbar %}
+    <h1>Изменение данных пользователя</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="user-edit-block">
+
+        <div class="filler"></div>
+        <form method="post">
+
+            {% for f in form %}
+
+                <div class="inputarea">
+                    {{ f }}
+                    <div class="labelline">{{ f.label }}</div>
+                </div>
+
+            {% endfor %}
+
+            {% csrf_token %}
+            <button id="confirm-edit-user-button" type="submit">Сохранить</button>
+        </form>
+        <div class="filler"></div>
+
+    </div>
+{% endblock %}

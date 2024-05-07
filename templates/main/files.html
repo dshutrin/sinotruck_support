@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block navbar %}
     <h1>Документы</h1>
@@ -10,24 +11,35 @@
         <div class="files-block">
 
             {% for doc in files %}
-                <div class="doc">
+                <a class="doc" target="_blank" href="/files/{{ doc.id }}">
+                    <div class="doc-image">
+                        {% if doc.file_type == 'pdf' %}
+                            <img src="{% static 'imgs/pdf.png' %}" alt="">
+                        {% endif %}
+                        {% if doc.file_type == 'xlsx' %}
+                            <img src="{% static 'imgs/xlsx.png' %}" alt="">
+                        {% endif %}
+                        {% if doc.file_type == 'doc' %}
+                            <img src="{% static 'imgs/doc.png' %}" alt="">
+                        {% endif %}
+                        {% if doc.file_type == 'docx' %}
+                            <img src="{% static 'imgs/doc.png' %}" alt="">
+                        {% endif %}
+                        {% if doc.file_type == 'image' %}
+                            <img src="{% static 'imgs/image.png' %}" alt="">
+                        {% endif %}
+                    </div>
                     <div class="doc-title">
                         {{ doc.title }}
                     </div>
-                    <div class="doc-link-block">
-                        <a target="_blank" href="/files/{{ doc.id }}">Открыть</a>
-                    </div>
-                </div>
+                </a>
             {% endfor %}
 
-            <div class="doc">
+            <a class="doc-additional" href="/files/add">
                 <div class="doc-title">
                     Добавить
                 </div>
-                <div class="doc-link-block">
-                    <a target="_blank" href="/files/add">Перейти</a>
-                </div>
-            </div>
+            </a>
 
         </div>
     {% else %}

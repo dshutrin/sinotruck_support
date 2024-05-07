@@ -19,9 +19,9 @@
             <thead><tr>
                 <th class="del-td"></th>
                 <th class="del-td"></th>
+                <th class="del-td"></th>
                 <th>Имя пользователя</th>
-                <th>Имя</th>
-                <th>Фамилия</th>
+                <th>Имя, Фамилия</th>
                 <th>Пароль</th>
                 <th>Задача</th>
             </tr></thead>
@@ -29,14 +29,16 @@
                 {% for manager in managers %}
                     <tr>
                         <td class="del-td">
+                            <button type="button" class="mini-link history_button" onclick="window.location.href += '/{{ manager.id }}/history'">History</button>
+                        </td>
+                        <td class="del-td">
                             <button type="button" class="mini-link rm_button" onclick="show_confirm_delete_user_modal({{ manager.id }})">Delete</button>
                         </td>
                         <td class="del-td">
                             <a class="mini-link edit_button" href="/edituser/{{ manager.id }}">Edit</a>
                         </td>
                         <td>{{ manager.username }}</td>
-                        <td>{{ manager.name }}</td>
-                        <td>{{ manager.surname }}</td>
+                        <td>{{ manager.name }} {{ manager.surname }}</td>
                         <td>{{ manager.clear_password }}</td>
                         <td>
                             {% if manager.sub_role %}
