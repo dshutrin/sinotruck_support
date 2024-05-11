@@ -60,12 +60,50 @@ def logout_view(request):
 
 def home(request):
 	if request.user.is_authenticated:
+
+		class Chat:
+			def __init__(self, recipient):
+				self.recipient = recipient
+				self.unread = len([
+					x for x in Message.objects.filter(sender=recipient, recipient=request.user, read=False)
+				])
+
+		chats = set([
+					x.recipient for x in Message.objects.filter(sender=request.user)
+				] + [
+					x.sender for x in Message.objects.filter(recipient=request.user)
+				])
+
+		chats = [Chat(x) for x in chats]
+
 		return render(request, 'main/home.html', {
 			'managers_count': CustomUser.objects.filter(role='MANAGER').count(),
 			'dealers_count': CustomUser.objects.filter(role='DEALER').count(),
-			'clients_count': CustomUser.objects.filter(role='CLIENT').count()
+			'clients_count': CustomUser.objects.filter(role='CLIENT').count(),
+			'chats': chats
 		})
+
 	return HttpResponseRedirect('/login')
+
+
+def get_chat(request, user_id):
+	user = CustomUser.objects.get(id=user_id)
+
+	messages = [
+		x for x in Message.objects.filter(sender=user, recipient=request.user)
+	] + [
+		x for x in Message.objects.filter(sender=request.user, recipient=user)
+	]
+
+	for x in Message.objects.filter(sender=user, recipient=request.user):
+		x.read = True
+		x.save()
+
+	return render(request, 'main/chat.html', {
+		'messages': messages,
+		'recipient': user,
+	})
+
 
 
 @csrf_exempt
@@ -177,11 +215,11 @@ def pricelist(request):
 
 
 def files(request):
-	files = Document.objects.all()
+	files_ = Document.objects.all()
 
 	return render(request, 'main/files.html', {
-		'files': files,
-		'files_count': files.count()
+		'files': files_,
+		'files_count': files_.count()
 	})
 
 
@@ -291,3 +329,10 @@ def edit_user(request, user_id):
 
 		else:
 			return HttpResponseRedirect('/')
+
+
+def user_history(request, user_id):
+	user = CustomUser.objects.get(id=user_id)
+	history = Activity.objects.filter(user=user).order_by('-id')
+
+	return render(request, 'main/user_history.html', {'user': user, 'history': history})

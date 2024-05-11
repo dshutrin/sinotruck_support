@@ -23,6 +23,9 @@ urlpatterns = [
     path('users/<int:user_id>', get_user_details),
     path('users/<int:user_id>/delete', delete_user),
     path('edituser/<int:user_id>', edit_user),
+    path('user_history/<int:user_id>', user_history),
+
+    path('chat/<int:user_id>', get_chat),
 
     path('activity', activity),
 ]

@@ -79,3 +79,15 @@ class Activity(models.Model):
 	class Meta:
 		verbose_name = 'Активность'
 		verbose_name_plural = 'Активности'
+
+
+class Message(models.Model):
+	sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Отправитель', related_name='sender')
+	recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Получатель', related_name='receiver')
+	text = models.TextField(verbose_name='Текст сообщения')
+	date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+	read = models.BooleanField(default=False)
+
+	class Meta:
+		verbose_name = 'Сообщение'
+		verbose_name_plural = 'Сообщения'

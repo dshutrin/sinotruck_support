@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>Чат с пользователем {{ recipient.username }}</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="user-chat-block">
+        <div class="filler"></div>
+        <div class="user-chat">
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    {% if message.sender == request.user %}
+                        <div class="my_message">
+                            <div class="message">
+                                <div class="message-body">
+                                    <span>{{ message.text }}</span>
+                                </div>
+                                <div class="message-info">
+                                    <span>Вы: {{ message.date }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="other_message">
+                            <div class="message">
+                                <div class="message-body">
+                                    <span>{{ message.text }}</span>
+                                </div>
+                                <div class="message-info">
+                                    <span>{{ recipient.username }}: {{ message.date }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% endfor %}
+            </div>
+            <div class="toolbar">
+                <textarea></textarea>
+                <button>send</button>
+            </div>
+        </div>
+        <div class="filler"></div>
+    </div>
+{% endblock %}

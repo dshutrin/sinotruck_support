@@ -17,3 +17,8 @@ class DocumentAdmin(admin.ModelAdmin):
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ('user', 'action', 'time', 'ip', 'place')
     readonly_fields = ('user', 'action', 'time', 'ip', 'place')
+
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('sender', 'recipient')

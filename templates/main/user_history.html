@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>История пользователя {{ user.username }}</h1>
+{% endblock %}
+
+{% block content %}
+    <table class="users-table">
+        <thead>
+            <tr>
+                <th>IP</th>
+                <th>Локация</th>
+                <th>Дата и время</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if hcount > 0 %}
+            {% for act in history %}
+                <tr>
+                    <td>{{ act.ip }}</td>
+                    <td>{{ act.place }}</td>
+                    <td>{{ act.time }}</td>
+                    <td>{{ act.action }}</td>
+                </tr>
+            {% endfor %}
+            {% else %}
+                <tr>
+                    <td class="empty_history" colspan="4">Не найдено</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

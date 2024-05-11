@@ -6,6 +6,7 @@
 
 {% block content %}
 
+    {% if request.user.role == 'ADMIN' %}
     <div class="home-info-blocks">
 
         <div class="managers-count">
@@ -16,6 +17,20 @@
         </div>
         <div class="clients-count">
             <h2>Количество клиентов: {{ clients_count }}</h2>
+        </div>
+
+    </div>
+    {% endif %}
+
+    <div class="chats-block">
+        <h1>Мои чаты</h1>
+
+        <div class="chats-list">
+            {% for chat in chats %}
+                <a class="chat" href="/chat/{{ chat.recipient.id }}">
+                    {{ chat.recipient.username }} ({{ chat.unread }})
+                </a>
+            {% endfor %}
         </div>
 
     </div>

@@ -20,6 +20,7 @@
             <thead><tr>
                 <th class="del-td"></th>
                 <th class="del-td"></th>
+                <th class="del-td"></th>
                 <th>Имя пользователя</th>
                 <th>Фирма</th>
                 <th>Пароль</th>
@@ -27,6 +28,9 @@
             <tbody>
                 {% for dealer in dealers %}
                     <tr>
+                        <td class="del-td">
+                            <button type="button" class="mini-link history_button" onclick="window.location.href = '/user_history/{{ dealer.id }}'">History</button>
+                        </td>
                         <td class="del-td">
                             <button type="button" class="mini-link rm_button" onclick="show_confirm_delete_user_modal({{ dealer.id }})">Delete</button>
                         </td>
