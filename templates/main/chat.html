@@ -9,7 +9,7 @@
     <div class="user-chat-block">
         <div class="filler"></div>
         <div class="user-chat">
-            <div class="messages">
+            <div id="messages-body" class="messages">
 
                 {% for message in messages %}
 
@@ -40,10 +40,15 @@
                 {% endfor %}
             </div>
             <div class="toolbar">
-                <textarea></textarea>
-                <button>send</button>
+                <textarea placeholder="Введите сообщение" id="message-text"></textarea>
+                <button onclick="sendMessage()">send</button>
             </div>
+
+            <input id="to" type="number" hidden value="{{ recipient.id }}">
+            <input id="from" type="number" hidden value="{{ request.user.id }}">
         </div>
         <div class="filler"></div>
     </div>
+
+    <script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}

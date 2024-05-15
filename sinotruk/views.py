@@ -1,3 +1,7 @@
+import csv
+
+import openpyxl
+from django.conf import settings
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login as user_login, logout as user_logout
 from django.http import FileResponse, JsonResponse
@@ -43,6 +47,9 @@ def login_view(request):
 				)
 				return HttpResponseRedirect('/')
 
+			else:
+				return render(request, 'main/login.html')
+
 		else:
 			return render(request, 'main/login.html')
 
@@ -54,6 +61,7 @@ def logout_view(request):
 		ip=request.META['REMOTE_ADDR'],
 		place=ip_info(request.META['REMOTE_ADDR'])
 	)
+
 	user_logout(request)
 	return HttpResponseRedirect('/login')
 
@@ -78,7 +86,7 @@ def home(request):
 
 		return render(request, 'main/home.html', {
 			'managers_count': CustomUser.objects.filter(role='MANAGER').count(),
-			'dealers_count': CustomUser.objects.filter(role='DEALER').count(),
+			'dealers_count': CustomUser.objects.filter(role='DILER').count(),
 			'clients_count': CustomUser.objects.filter(role='CLIENT').count(),
 			'chats': chats
 		})
@@ -100,10 +108,9 @@ def get_chat(request, user_id):
 		x.save()
 
 	return render(request, 'main/chat.html', {
-		'messages': messages,
+		'messages': sorted(messages, key=lambda x: x.date),
 		'recipient': user,
 	})
-
 
 
 @csrf_exempt
@@ -207,18 +214,102 @@ def add_dealer(request):
 
 
 def clients(request):
-	return render(request, 'main/clients.html')
+	clients = CustomUser.objects.filter(role='CLIENT')
+
+	return render(request, 'main/clients.html', {
+		'clients': clients,
+		'clients_count': clients.count()
+	})
+
+
+def add_client(request):
+	if request.user.role == 'ADMIN':
+		if request.method == 'POST':
+
+			username = request.POST.get('username')
+			name = request.POST.get('name')
+			surname = request.POST.get('surname')
+			password = request.POST.get('clear_password')
+
+			user = CustomUser.objects.create_user(username=username, name=name, surname=surname, role='CLIENT', password=password)
+			user.custom_set_password(password)
+			user.save()
+
+			Activity.objects.create(
+				user=request.user,
+				action=f'Добавление клиента {user.username}',
+				ip=request.META['REMOTE_ADDR'],
+				place=ip_info(request.META['REMOTE_ADDR'])
+			)
+
+			return HttpResponseRedirect('/clients')
+
+		else:
+			return render(request, 'main/add_client.html')
+	else:
+		return HttpResponseRedirect('/')
 
 
 def pricelist(request):
-	return render(request, 'main/pricelist.html')
+
+	if request.method == "POST":
+
+		f = request.FILES["excel_file"]
+		end = request.FILES["excel_file"].name.split(".")[-1]
+
+		with open(f'{settings.BASE_DIR}/media/pricelist/file.{end}', 'wb+') as destination:
+			for chunk in f.chunks():
+				destination.write(chunk)
+
+		excel = openpyxl.load_workbook(f'{settings.BASE_DIR}/media/pricelist/file.{end}')
+		sheet = excel.active
+
+		rows = []
+		for r in sheet.rows:
+			rows.append([])
+			for cell in r:
+				rows[-1].append(cell.value)
+
+		print(rows)
+
+	return render(request, 'main/pricelist.html', {
+		#'rows': rows
+	})
+
+
+def add_folder(request):
+	if request.method == "POST":
+		form = AddFolderForm(request.POST)
+
+		if form.is_valid():
+
+			Folder.objects.create(name=request.POST.get('folder-name'))
+
+			return HttpResponseRedirect('/files')
+
+		else:
+			return render(request, 'main/add_folder.html', {'form': form})
+
+	return render(request, 'main/add_folder.html', {'form': AddFolderForm()})
+
+
+def folder_detail(request, fid):
+	folder = Folder.objects.get(id=fid)
+	files_ = Document.objects.filter(folder=folder)
+
+	return render(request, 'main/folder_detail.html', {
+		'files': files_,
+		'folder_title': folder.name
+	})
 
 
 def files(request):
-	files_ = Document.objects.all()
+	folders = Folder.objects.all()
+	files_ = Document.objects.filter(folder=None)
 
 	return render(request, 'main/files.html', {
 		'files': files_,
+		'folders': folders,
 		'files_count': files_.count()
 	})
 
@@ -281,6 +372,9 @@ def edit_user(request, user_id):
 		elif user.role == 'DILER':
 			form = EditDealerForm(instance=user)
 			return render(request, 'main/edit_user.html', {'user': user, 'form': form})
+		elif user.role == 'CLIENT':
+			form = EditClientForm(instance=user)
+			return render(request, 'main/edit_user.html', {'user': user, 'form': form})
 		else:
 			return HttpResponseRedirect('/')
 
@@ -335,4 +429,28 @@ def user_history(request, user_id):
 	user = CustomUser.objects.get(id=user_id)
 	history = Activity.objects.filter(user=user).order_by('-id')
 
-	return render(request, 'main/user_history.html', {'user': user, 'history': history})
+	return render(request, 'main/user_history.html', {
+		'user': user,
+		'history': history,
+		'hcount': history.count()
+	})
+
+
+@csrf_exempt
+def add_message(request):
+	if request.user.is_authenticated:
+		if request.method == 'POST':
+			print(request.POST)
+
+			message = Message.objects.create(
+				sender=CustomUser.objects.get(id=int(request.POST.get('from'))),
+				recipient=CustomUser.objects.get(id=int(request.POST.get('to'))),
+				text=request.POST.get('text')
+			)
+
+			return JsonResponse({
+				'from': message.sender.username,
+				'to': message.recipient.username,
+				'text': message.text,
+				'date': message.date.strftime('%d %B %Y г. %H:%M')
+			}, status=200)

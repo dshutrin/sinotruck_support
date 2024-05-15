@@ -22,3 +22,8 @@ class ActivityAdmin(admin.ModelAdmin):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('sender', 'recipient')
+
+
+@admin.register(Folder)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('name', )

@@ -14,11 +14,16 @@ urlpatterns = [
     path('dealers/add', add_dealer),
 
     path('clients', clients),
+    path('clients/add', add_client),
+
     path('pricelist', pricelist),
 
     path('files', files),
     path('files/<int:doc_id>', get_document),
     path('files/add', add_file),
+
+    path('folders/add', add_folder),
+    path('folders/<int:fid>', folder_detail),
 
     path('users/<int:user_id>', get_user_details),
     path('users/<int:user_id>/delete', delete_user),
@@ -26,6 +31,7 @@ urlpatterns = [
     path('user_history/<int:user_id>', user_history),
 
     path('chat/<int:user_id>', get_chat),
+    path('chat/messages/add', add_message),
 
     path('activity', activity),
 ]

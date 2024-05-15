@@ -14,7 +14,7 @@ class AddFileForm(forms.ModelForm):
 
     class Meta:
         model = Document
-        exclude = ('owner', 'file_type')
+        exclude = ('owner', 'file_type', 'folder')
 
 
 class EditUserForm(forms.ModelForm):
@@ -46,3 +46,15 @@ class EditDealerForm(EditUserForm):
         exclude = (
             'password', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'email', 'sub_role'
         )
+
+
+class EditClientForm(EditUserForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'name', 'surname', 'email', 'clear_password', 'role')
+
+
+class AddFolderForm(forms.ModelForm):
+    class Meta:
+        model = Folder
+        exclude = ('name', )

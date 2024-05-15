@@ -20,6 +20,7 @@
                 <th class="del-td"></th>
                 <th class="del-td"></th>
                 <th class="del-td"></th>
+                <th class="del-td"></th>
                 <th>Имя пользователя</th>
                 <th>Имя, Фамилия</th>
                 <th>Пароль</th>
@@ -28,6 +29,9 @@
             <tbody>
                 {% for manager in managers %}
                     <tr>
+                        <td class="del-td">
+                            <button type="button" class="mini-link chat_button" onclick="window.location.href = '/chat/{{ manager.id }}'">Chat</button>
+                        </td>
                         <td class="del-td">
                             <button type="button" class="mini-link history_button" onclick="window.location.href = '/user_history/{{ manager.id }}'">History</button>
                         </td>

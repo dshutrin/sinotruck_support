@@ -28,7 +28,10 @@
         <div class="chats-list">
             {% for chat in chats %}
                 <a class="chat" href="/chat/{{ chat.recipient.id }}">
-                    {{ chat.recipient.username }} ({{ chat.unread }})
+                    {{ chat.recipient.username }}
+                    {% if chat.unread > 0 %}
+                        (<p>{{ chat.unread }}</p>)
+                    {% endif %}
                 </a>
             {% endfor %}
         </div>

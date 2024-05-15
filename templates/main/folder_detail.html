@@ -2,24 +2,12 @@
 {% load static %}
 
 {% block navbar %}
-    <h1>Документы</h1>
+    <h1>Папка {{ folder.name }}</h1>
 {% endblock %}
 
 {% block content %}
 
-    {% if files_count > 0 %}
         <div class="files-block">
-
-            {% for folder in folders %}
-                <a class="doc" href="/folders/{{ folder.id }}">
-                    <div class="doc-image">
-                        <img src="{% static 'imgs/folder.png' %}" alt="">
-                    </div>
-                    <div class="doc-title">
-                        {{ folder.name }}
-                    </div>
-                </a>
-            {% endfor %}
 
             {% for doc in files %}
                 <a class="doc" target="_blank" href="/files/{{ doc.id }}">
@@ -52,15 +40,7 @@
                 </div>
             </a>
 
-            <a class="doc-additional" href="/folders/add">
-                <div class="doc-title">
-                    Добавить папку
-                </div>
-            </a>
-
         </div>
-    {% else %}
 
-    {% endif %}
 
 {% endblock %}

@@ -22,11 +22,11 @@ class CustomUser(AbstractBaseUser):
 
 	name = models.CharField(verbose_name='Имя', max_length=150, null=True, default=None, blank=True)
 	surname = models.CharField(verbose_name='Фамилия', max_length=150, null=True, default=None, blank=True)
-	clear_password = models.CharField(max_length=255, null=True, default=None)
+	clear_password = models.CharField(max_length=255, null=True, default=None, verbose_name='Пароль')
 
 	role = models.CharField(verbose_name='Роль', max_length=150, null=True, default='CLIENT', choices=ROLES_CHOICES)
-	sub_role = models.CharField(verbose_name='Задача', max_length=100, null=True, default=None)
-	dealer_name = models.CharField(verbose_name='Фирма', max_length=255, null=True, default=None)
+	sub_role = models.CharField(verbose_name='Задача', max_length=100, null=True, default=None, blank=True)
+	dealer_name = models.CharField(verbose_name='Фирма', max_length=255, null=True, default=None, blank=True)
 
 	objects = CustomUserManager()
 	USERNAME_FIELD = 'username'
@@ -57,12 +57,21 @@ class CustomUser(AbstractBaseUser):
 		return f'{self.name} {self.surname}'
 
 
+class Folder(models.Model):
+	name = models.CharField(verbose_name="Папка", max_length=150, unique=True)
+
+	class Meta:
+		verbose_name = 'Папка'
+		verbose_name_plural = 'Папки'
+
+
 class Document(models.Model):
 	title = models.CharField(verbose_name='Название', max_length=150, default=None)
 	document = models.FileField(upload_to='documents', verbose_name='Файл')
 	owner = models.CharField(verbose_name='Владелец', max_length=150, null=True, default=None, blank=True)
 	last_modified = models.DateTimeField(auto_now=True)
 	file_type = models.CharField(max_length=10, null=True, default=None, verbose_name='Тип документа')
+	folder = models.ForeignKey(Folder, verbose_name='Папка', null=True, default=None, on_delete=models.CASCADE)
 
 	class Meta:
 		verbose_name = 'Документ'

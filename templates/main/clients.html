@@ -1,9 +1,65 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block navbar %}
     <h1>Клиенты</h1>
 {% endblock %}
 
 {% block content %}
+
+    {% if request.user.role == 'ADMIN' %}
+        <div class="add-manager-block">
+            <a href="/clients/add">
+                <button id="add-manager-button">Добавить нового клиента</button>
+            </a>
+        </div>
+    {% endif %}
+
+    {% if clients_count > 0 %}
+        <table class="users-table">
+            <thead><tr>
+                <th class="del-td"></th>
+                <th class="del-td"></th>
+                <th class="del-td"></th>
+                <th class="del-td"></th>
+                <th>Имя пользователя</th>
+                <th>Имя, Фамилия</th>
+                <th>Пароль</th>
+            </tr></thead>
+            <tbody>
+                {% for client in clients %}
+                    <tr>
+                        <td class="del-td">
+                            <button type="button" class="mini-link chat_button" onclick="window.location.href = '/chat/{{ client.id }}'">Chat</button>
+                        </td>
+                        <td class="del-td">
+                            <button type="button" class="mini-link history_button" onclick="window.location.href = '/user_history/{{ client.id }}'">History</button>
+                        </td>
+                        <td class="del-td">
+                            <button type="button" class="mini-link rm_button" onclick="show_confirm_delete_user_modal({{ client.id }})">Delete</button>
+                        </td>
+                        <td class="del-td">
+                            <a class="mini-link edit_button" href="/edituser/{{ client.id }}">Edit</a>
+                        </td>
+                        <td>{{ client.username }}</td>
+                        <td>{{ client.name }} {{ client.surname }}</td>
+                        <td>{{ client.clear_password }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h1 class="not-found">Клиенты не найдены!</h1>
+    {% endif %}
+
+    <script src="{% static 'js/users_functions.js' %}"></script>
+
+    <div id="user_modal" style="display: none;">
+        <h4 id="modal-text"></h4>
+        <div id="user-modal-buttons-block">
+            <button id="cancel_rm_user" onclick="document.getElementById('user_modal').style.display = 'none'" type="button">Нет</button>
+            <button id="confirm_rm_user" type="button">Да</button>
+        </div>
+    </div>
 
 {% endblock %}
