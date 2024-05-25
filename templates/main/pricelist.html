@@ -1,32 +1,89 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block navbar %}
     <h1>Прайс-лист</h1>
 {% endblock %}
 
 {% block content %}
-    <div class="form-upload-block">
-        <div class="filler"></div>
-        <form id="excel-form" method="post" enctype="multipart/form-data">
-            <label id="excel-label" for="excel_file">Выберите файл</label>
-            <input id="excel_file" name="excel_file" type="file">
 
-            {% csrf_token %}
-            <button id="excel-button" type="submit">Отправить</button>
-        </form>
-        <div class="filler"></div>
+    <div class="pricelist-info-block">
+        <h1>Обновлён {{ update_date }}</h1>
+        <div class="add-link">
+            <a href="/add_pricelist">Обновить прайс-лист</a>
+        </div>
     </div>
 
-    <table class="my_table">
-        <tbody>
-            {% for row in rows %}
+    <div class="product-find-block">
+        <form method="post">
+            <input id="nom" name="nom" class="form-control_" type="text" placeholder="Номенклатура"
+                {% if n %}
+                    value="{{ n }}"
+                {% endif %}
+            >
+            <input id="char" name="char" class="form-control_" type="text" placeholder="Ценовая группа/ Номенклатура/ Характеристика номенклатуры"
+                {% if c %}
+                    value="{{ c }}"
+                {% endif %}
+            >
+            <input id="mark" name="mark" class="form-control_" type="text" placeholder="Марка"
+                {% if m %}
+                    value="{{ m }}"
+                {% endif %}
+            >
+            <button type="submit" id="search_button">Поиск</button>
+            {% csrf_token %}
+        </form>
+    </div>
+
+    <div id="scrolled_table">
+        <table class="my_table">
+            <thead>
                 <tr>
-                    {% for val in row %}
-                        {{ val }}
-                    {% endfor %}
+                    <th>Номенклатура.Артикул</th>
+                    <th>Ценовая группа/ Номенклатура/ Характеристика номенклатуры</th>
+                    <th>Остаток</th>
+                    <th>Марка</th>
+                    <th>Цена</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
+            </thead>
+            <tbody id="tb">
+                {% for prod in products %}
+                <tr>
+                    <td>
+                        {% if prod.serial_number %}
+                            {{ prod.serial_number }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if prod.name %}
+                            {{ prod.name }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if prod.count %}
+                            {{ prod.count }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if prod.mark %}
+                            {{ prod.mark }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if prod.price %}
+                            {{ prod.price }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/price_list.js' %}"></script>
 {% endblock %}

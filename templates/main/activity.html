@@ -6,4 +6,59 @@
 
 {% block content %}
 
+    <div class="activity_users_block">
+
+        <div class="role-block">
+            <h1>Дилеры</h1>
+            <div class="users-list">
+                {% for user in dilers %}
+                    <a href="/user_history/{{ user.id }}" class="user-activity-link">
+                        {{ user.username }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="role-block">
+            <h1>Менеджеры</h1>
+            <div class="users-list">
+                {% for user in managers %}
+                    <a href="/user_history/{{ user.id }}" class="user-activity-link">
+                        {{ user.username }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="role-block">
+            <h1>Клиенты</h1>
+            <div class="users-list">
+                {% for user in clients %}
+                    <a href="/user_history/{{ user.id }}" class="user-activity-link">
+                        {{ user.username }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="role-block">
+            <h1>Суперменеджеры</h1>
+            <div class="users-list">
+                {% for user in supermanagers %}
+                    <a href="/user_history/{{ user.id }}" class="user-activity-link">
+                        {{ user.username }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="role-block">
+            <h1>Администраторы</h1>
+            <div class="users-list">
+                {% for user in admins %}
+                    <a href="/user_history/{{ user.id }}" class="user-activity-link">
+                        {{ user.username }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
 {% endblock %}

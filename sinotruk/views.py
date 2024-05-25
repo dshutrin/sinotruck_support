@@ -1,5 +1,5 @@
 import csv
-
+import pandas as pd
 import openpyxl
 from django.conf import settings
 from django.shortcuts import render, HttpResponseRedirect
@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate, login as user_login, logout as use
 from django.http import FileResponse, JsonResponse
 from .models import *
 from .forms import *
+from .utils import *
 from django.views.decorators.csrf import csrf_exempt
-import IP2Location
 
 
 def ip_info(addr):
@@ -101,6 +101,10 @@ def get_chat(request, user_id):
 		x for x in Message.objects.filter(sender=user, recipient=request.user)
 	] + [
 		x for x in Message.objects.filter(sender=request.user, recipient=user)
+	] + [
+		x for x in MessageDocument.objects.filter(sender=request.user, recipient=user)
+	] + [
+		x for x in MessageDocument.objects.filter(sender=user, recipient=request.user)
 	]
 
 	for x in Message.objects.filter(sender=user, recipient=request.user):
@@ -251,7 +255,51 @@ def add_client(request):
 
 
 def pricelist(request):
+	act = Activity.objects.filter(action='Обновление прайс-листа').order_by('-time')
+	update_date = None
 
+	if len(act):
+		update_date = act.last().time
+
+	if request.method == 'GET':
+		products = Product.objects.all()
+
+		return render(request, 'main/pricelist.html', {
+			'update_date': update_date,
+			'products': products
+		})
+
+	elif request.method == 'POST':
+		nom = request.POST.get('nom')
+		nom = nom.lower() if nom else None
+		char = request.POST.get('char')
+		char = char.lower() if char else None
+		mark = request.POST.get('mark')
+		mark = mark.lower() if mark else None
+
+		products = [x for x in Product.objects.all()]
+
+		if nom:
+			products = [
+				x for x in products if nom in str(x.serial_number).lower()
+			]
+		if char:
+			products = [
+				x for x in products if char in str(x.name).lower()
+			]
+		if mark:
+			products = [
+				x for x in products if mark in str(x.mark).lower()
+			]
+
+		return render(request, 'main/pricelist.html', {
+			'update_date': update_date,
+			'products': products,
+			'n': nom, 'c': char, 'm': mark
+		})
+
+
+def add_pricelist(request):
 	if request.method == "POST":
 
 		f = request.FILES["excel_file"]
@@ -260,6 +308,8 @@ def pricelist(request):
 		with open(f'{settings.BASE_DIR}/media/pricelist/file.{end}', 'wb+') as destination:
 			for chunk in f.chunks():
 				destination.write(chunk)
+
+		fix_excel(f'{settings.BASE_DIR}/media/pricelist/file.{end}')
 
 		excel = openpyxl.load_workbook(f'{settings.BASE_DIR}/media/pricelist/file.{end}')
 		sheet = excel.active
@@ -270,11 +320,50 @@ def pricelist(request):
 			for cell in r:
 				rows[-1].append(cell.value)
 
-		print(rows)
+		start_index = 0
+		for i in range(len(rows)):
+			if 'Номенклатура.Артикул' in [str(x).strip() for x in rows[i] if x]:
+				start_index = i
+				break
 
-	return render(request, 'main/pricelist.html', {
-		#'rows': rows
-	})
+		dt = [str(x).strip() for x in rows[start_index]]
+		sn = dt.index('Номенклатура.Артикул')
+		name = dt.index('Ценовая группа/ Номенклатура')
+		ost = dt.index('Остаток')
+		mrk = dt.index('Марки')
+		prc = dt.index('Дилер')
+
+		Product.objects.all().delete()
+		for row in rows[start_index+1:]:
+			sn_ = row[sn]
+			if sn_:
+				name_ = row[name]
+				ost_ = str(row[ost])
+				if ost_.isdigit():
+					ost_ = int(ost_)
+
+				mrk_ = row[mrk]
+				prc_ = str(row[prc]).replace('руб.', '').strip()
+				if prc_.replace('.', '').isdigit():
+					prc_ = float(prc_)
+
+				Product.objects.create(
+					serial_number=sn_,
+					name=name_,
+					count=ost_,
+					price=prc_,
+					mark=mrk_
+				)
+
+		Activity.objects.create(
+			user=request.user,
+			action=f'Обновление прайс-листа',
+			ip=request.META['REMOTE_ADDR'],
+			place=ip_info(request.META['REMOTE_ADDR'])
+		)
+
+		return HttpResponseRedirect('/pricelist')
+	return render(request, 'main/add_pricelist.html')
 
 
 def add_folder(request):
@@ -284,6 +373,13 @@ def add_folder(request):
 		if form.is_valid():
 
 			Folder.objects.create(name=request.POST.get('folder-name'))
+
+			Activity.objects.create(
+				user=request.user,
+				action=f'Создание папки {request.POST.get("folder-name")}',
+				ip=request.META['REMOTE_ADDR'],
+				place=ip_info(request.META['REMOTE_ADDR'])
+			)
 
 			return HttpResponseRedirect('/files')
 
@@ -296,6 +392,13 @@ def add_folder(request):
 def folder_detail(request, fid):
 	folder = Folder.objects.get(id=fid)
 	files_ = Document.objects.filter(folder=folder)
+
+	Activity.objects.create(
+		user=request.user,
+		action=f'Просмотр папки {folder.name}',
+		ip=request.META['REMOTE_ADDR'],
+		place=ip_info(request.META['REMOTE_ADDR'])
+	)
 
 	return render(request, 'main/folder_detail.html', {
 		'files': files_,
@@ -359,7 +462,13 @@ def get_document(request, doc_id):
 
 
 def activity(request):
-	return render(request, 'main/activity.html')
+	return render(request, 'main/activity.html', {
+		'managers': CustomUser.objects.filter(role='MANAGER'),
+		'dilers': CustomUser.objects.filter(role='DILER'),
+		'clients': CustomUser.objects.filter(role='CLIENT'),
+		'supermanagers': CustomUser.objects.filter(role='SUPERMANAGER'),
+		'admins': CustomUser.objects.filter(role='ADMIN')
+	})
 
 
 def edit_user(request, user_id):
@@ -440,7 +549,6 @@ def user_history(request, user_id):
 def add_message(request):
 	if request.user.is_authenticated:
 		if request.method == 'POST':
-			print(request.POST)
 
 			message = Message.objects.create(
 				sender=CustomUser.objects.get(id=int(request.POST.get('from'))),
@@ -454,3 +562,30 @@ def add_message(request):
 				'text': message.text,
 				'date': message.date.strftime('%d %B %Y г. %H:%M')
 			}, status=200)
+
+
+def send_file_message(request, uid):
+	recipient = CustomUser.objects.get(id=uid)
+
+	if request.method == 'POST':
+		form = FileUploadForm(request.POST, request.FILES)
+
+		if form.is_valid():
+
+			msg = form.save(commit=False)
+			msg.recipient = recipient
+			msg.sender = request.user
+			msg.save()
+
+			return HttpResponseRedirect(f'/chat/{uid}')
+		else:
+
+			return render(request, 'main/send_file_message.html', {
+				'form': form,
+				'recipient': recipient
+			})
+
+	return render(request, 'main/send_file_message.html', {
+		'form': FileUploadForm(),
+		'recipient': recipient
+	})

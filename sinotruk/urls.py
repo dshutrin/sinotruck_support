@@ -17,6 +17,7 @@ urlpatterns = [
     path('clients/add', add_client),
 
     path('pricelist', pricelist),
+    path('add_pricelist', add_pricelist),
 
     path('files', files),
     path('files/<int:doc_id>', get_document),
@@ -32,6 +33,7 @@ urlpatterns = [
 
     path('chat/<int:user_id>', get_chat),
     path('chat/messages/add', add_message),
+    path('chat/<int:uid>/send_file', send_file_message),
 
     path('activity', activity),
 ]

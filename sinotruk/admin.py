@@ -27,3 +27,13 @@ class MessageAdmin(admin.ModelAdmin):
 @admin.register(Folder)
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('name', )
+
+
+@admin.register(MessageDocument)
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('sender', 'recipient', )
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'count')

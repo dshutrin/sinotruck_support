@@ -17,7 +17,16 @@
                         <div class="my_message">
                             <div class="message">
                                 <div class="message-body">
-                                    <span>{{ message.text }}</span>
+                                    {% if message.text %}
+                                        <span>{{ message.text }}</span>
+                                    {% else %}
+                                        <span>
+                                            <span class="material-symbols-outlined">
+                                                attach_file
+                                            </span>
+                                            <a target="_blank" href="{{ message.document.url }}">{{ message.get_text }}</a>
+                                        </span>
+                                    {% endif %}
                                 </div>
                                 <div class="message-info">
                                     <span>Вы: {{ message.date }}</span>
@@ -41,13 +50,18 @@
             </div>
             <div class="toolbar">
                 <textarea placeholder="Введите сообщение" id="message-text"></textarea>
+
                 <button onclick="sendMessage()">send</button>
             </div>
 
             <input id="to" type="number" hidden value="{{ recipient.id }}">
             <input id="from" type="number" hidden value="{{ request.user.id }}">
         </div>
-        <div class="filler"></div>
+        <div id="right-chat-filler" class="filler">
+
+            <a id="go_to_send_file" href="/chat/{{ recipient.id }}/send_file">Отправить файл</a>
+
+        </div>
     </div>
 
     <script src="{% static 'js/chat.js' %}"></script>

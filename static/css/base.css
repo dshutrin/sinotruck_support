@@ -724,3 +724,191 @@ p {
     font-size: 24px;
     padding: 0.5rem 1rem;
 }
+
+#right-chat-filler {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+#go_to_send_file {
+    width: 80%;
+    background-color: #2f89ff;
+    color: white;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+#file_message_label {
+    display: block;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px dashed #e4efff;
+    font-size: 30px;
+    padding: 1rem;
+    width: calc(100% - 2rem - 2px);
+    cursor: pointer;
+}
+
+#file_message_label:hover {
+    background-color: #788ba3;
+}
+
+#file_message_button {
+    display: block;
+    text-align: center;
+    border-radius: 10px;
+    border: none;
+    font-size: 30px;
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 2rem;
+    cursor: pointer;
+    background-color: #2f89ff;
+}
+
+table, tbody {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+table, thead, tbody, tr, th, td {
+    border: 1px solid gray;
+}
+
+th, td {
+    padding: 0.5rem;
+}
+
+.my_table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid gray;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.my_table tr:first-of-type th:first-of-type {
+    border-top-left-radius: 10px;
+}
+
+.my_table tr:first-of-type th:last-of-type {
+    border-top-right-radius: 10px;
+}
+
+.my_table tr:last-of-type td:first-of-type {
+    border-bottom-left-radius: 10px;
+}
+
+.my_table tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: 10px;
+}
+
+.material-symbols-outlined {
+	vertical-align: middle;
+}
+
+.pricelist-info-block > h1 {
+    padding: 0;
+    margin: 0;
+}
+
+.add-link {
+    text-align: end;
+    margin-bottom: 1rem;
+}
+
+.add-link > a {
+    color: #e4efff;
+    text-decoration: none;
+    background-color: #2f89ff;
+    border-radius: 10px;
+    padding: 0.3rem 1rem;
+    margin: 1rem;
+}
+
+.product-find-block {
+    margin: 1rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+#search-product {
+    width: 70%;
+    border-radius: 5px;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    padding: 5px;
+    color: black;
+    text-align: center;
+}
+
+#search_button {
+    color: #e4efff;
+    background-color: #2f89ff;
+    padding: 0.5rem 3rem;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.form-control_ {
+    font-size: 18px;
+    border-radius: 10px;
+    color: black;
+    padding: 0.5rem 1rem;
+    border: none;
+    outline: none;
+    margin-right: 0.5rem;
+    width: 25%;
+}
+
+.centred {
+    text-align: center;
+}
+
+#scrolled_table {
+    max-height: 75vh;
+    overflow-y: scroll;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+#scrolled_table::-webkit-scrollbar {
+  width: 10px;
+}
+
+#scrolled_table::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+#scrolled_table::-webkit-scrollbar-thumb {
+  background: rgba(207, 207, 207, 0.63);
+  border-radius: 10px;
+}
+
+.users-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+}
+
+.user-activity-link {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #6baafd;
+    color: #e4efff;
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+}

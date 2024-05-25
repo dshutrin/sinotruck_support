@@ -78,6 +78,20 @@ class Document(models.Model):
 		verbose_name_plural = 'Документы'
 
 
+class MessageDocument(models.Model):
+	document = models.FileField(upload_to='documents', verbose_name='Файл')
+	sender = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Отправитель', related_name='MessageDocumentsender')
+	recipient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Получатель', related_name='MessageDocumentreceiver')
+	date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+	def get_text(self):
+		return self.document.name.replace('documents/', '', 1)
+
+	class Meta:
+		verbose_name = 'Файл сообщения'
+		verbose_name_plural = 'Файлы сообщений'
+
+
 class Activity(models.Model):
 	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Пользователь')
 	action = models.CharField(verbose_name='Действие', max_length=150)
@@ -100,3 +114,30 @@ class Message(models.Model):
 	class Meta:
 		verbose_name = 'Сообщение'
 		verbose_name_plural = 'Сообщения'
+
+
+class Product(models.Model):
+	serial_number = models.CharField(max_length=100, verbose_name='Номенклатурв')
+	name = models.CharField(max_length=255, verbose_name='Ценовая группа/ Номенклатура/ Характеристика номенклатуры')
+	count = models.IntegerField(verbose_name='Остаток')
+	mark = models.CharField(verbose_name='Марка', max_length=255, null=True)
+	price = models.FloatField(verbose_name='Цена')
+
+	def to_json(self):
+
+		serial_number = self.serial_number if self.serial_number else ""
+		name = self.name if self.name else ""
+		mark = self.mark if self.mark else ""
+
+		return {
+			'serial_number': serial_number,
+			'name': name,
+			'count': self.count,
+			'mark': mark,
+			'price': self.price,
+			'id': self.id
+		}
+
+	class Meta:
+		verbose_name = 'Товар'
+		verbose_name_plural = 'Товары'

@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>Чат с пользователем {{ recipient.username }}</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="user-chat-block">
+        <div class="filler"></div>
+        <form method="post" class="user-chat" enctype="multipart/form-data">
+
+            <label id="file_message_label" for="{{ form.document.id_for_label }}">Выбрать файл</label>
+            {{ form.document }}
+            
+            {% csrf_token %}
+            <button id="file_message_button" type="submit">Отправить</button>
+
+        </form>
+        <div id="right-chat-filler" class="filler">
+
+            <a id="go_to_send_file" href="/chat/{{ recipient.id }}">Вернуться в чат</a>
+
+        </div>
+    </div>
+
+    <script src="{% static 'js/chat.js' %}"></script>
+{% endblock %}

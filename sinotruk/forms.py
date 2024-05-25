@@ -58,3 +58,9 @@ class AddFolderForm(forms.ModelForm):
     class Meta:
         model = Folder
         exclude = ('name', )
+
+
+class FileUploadForm(forms.ModelForm):
+    class Meta:
+        model = MessageDocument
+        fields = ('document', )

@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+
+{% block navbar %}
+    <h1>Прайс-лист</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="form-upload-block">
+        <div class="filler"></div>
+        <form id="excel-form" method="post" enctype="multipart/form-data">
+            <label id="excel-label" for="excel_file">Выберите файл</label>
+            <input id="excel_file" name="excel_file" type="file">
+
+            {% csrf_token %}
+            <button id="excel-button" type="submit">Отправить</button>
+        </form>
+        <div class="filler"></div>
+    </div>
+{% endblock %}
