@@ -1,0 +1,76 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>Загрузка активности</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="activity_users_block">
+        {% if dilers_count > 0 %}
+        <div class="role-block">
+            <h1>Дилеры <input id="all_dilers" type="checkbox" onchange="update_all('diler', 'all_dilers')"></h1>
+            <div class="users-list">
+                {% for user in dilers %}
+                    <div id="user-{{ user.id }}" class="user-activity-link clicked diler" onclick="click_action('{{ user.id }}')">
+                        {{ user.username }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if managers_count > 0 %}
+        <div class="role-block">
+            <h1>Менеджеры <input id="all_managers" type="checkbox" onchange="update_all('manager', 'all_managers')"></h1>
+            <div class="users-list">
+                {% for user in managers %}
+                    <div id="user-{{ user.id }}" class="user-activity-link clicked manager" onclick="click_action('{{ user.id }}')">
+                        {{ user.username }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if clients_count > 0 %}
+        <div class="role-block">
+            <h1>Клиенты <input id="all_clients" type="checkbox" onchange="update_all('client', 'all_clients')"></h1>
+            <div class="users-list">
+                {% for user in clients %}
+                    <div id="user-{{ user.id }}" class="user-activity-link clicked client" onclick="click_action('{{ user.id }}')">
+                        {{ user.username }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if supermanagers_count > 0 %}
+        <div class="role-block">
+            <h1>Суперменеджеры <input id="all_supermanagers" type="checkbox" onchange="update_all('supermanager', 'all_supermanagers')"></h1>
+            <div class="users-list">
+                {% for user in supermanagers %}
+                    <div id="user-{{ user.id }}" class="user-activity-link clicked supermanager" onclick="click_action('{{ user.id }}')">
+                        {{ user.username }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% if admins_count > 0 %}
+        <div class="role-block">
+            <h1>Администраторы <input id="all_admins" type="checkbox" onchange="update_all('admin', 'all_admins')"></h1>
+            <div class="users-list">
+                {% for user in admins %}
+                    <div id="user-{{ user.id }}" class="user-activity-link clicked admin" onclick="click_action('{{ user.id }}')">
+                        {{ user.username }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <script src="{% static 'js/load_activity.js' %}"></script>
+
+{% endblock %}

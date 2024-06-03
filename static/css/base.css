@@ -911,4 +911,22 @@ th, td {
     align-items: center;
     justify-content: center;
     margin: 1rem;
+
+}
+
+input[type='checkbox'] {
+    width:22px;
+    color: whitesmoke;
+    background-color: #2f89ff;
+    height:22px;
+    border: 2px solid #2f89ff;
+    border-radius:10px;
+}
+
+.clicked {
+    cursor: pointer;
+}
+
+.selected {
+    background-color: #006b1b;
 }

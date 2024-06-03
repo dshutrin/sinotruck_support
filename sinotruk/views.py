@@ -462,13 +462,46 @@ def get_document(request, doc_id):
 
 
 def activity(request):
+	managers = CustomUser.objects.filter(role='MANAGER')
+	dilers = CustomUser.objects.filter(role='DILER')
+	clients = CustomUser.objects.filter(role='CLIENT')
+	supermanagers = CustomUser.objects.filter(role='SUPERMANAGER')
+	admins = CustomUser.objects.filter(role='ADMIN')
+
 	return render(request, 'main/activity.html', {
-		'managers': CustomUser.objects.filter(role='MANAGER'),
-		'dilers': CustomUser.objects.filter(role='DILER'),
-		'clients': CustomUser.objects.filter(role='CLIENT'),
-		'supermanagers': CustomUser.objects.filter(role='SUPERMANAGER'),
-		'admins': CustomUser.objects.filter(role='ADMIN')
+		'managers': managers,
+		'dilers': dilers,
+		'clients': clients,
+		'supermanagers': supermanagers,
+		'admins': admins,
+		'managers_count': managers.count(),
+		'dilers_count': dilers.count(),
+		'clients_count': clients.count(),
+		'supermanagers_count': supermanagers.count(),
+		'admins_count': admins.count()
 	})
+
+
+def load_activity(request):
+	if request.method == "GET":
+		managers = CustomUser.objects.filter(role='MANAGER')
+		dilers = CustomUser.objects.filter(role='DILER')
+		clients = CustomUser.objects.filter(role='CLIENT')
+		supermanagers = CustomUser.objects.filter(role='SUPERMANAGER')
+		admins = CustomUser.objects.filter(role='ADMIN')
+
+		return render(request, 'main/load_activity.html', {
+			'managers': managers,
+			'dilers': dilers,
+			'clients': clients,
+			'supermanagers': supermanagers,
+			'admins': admins,
+			'managers_count': managers.count(),
+			'dilers_count': dilers.count(),
+			'clients_count': clients.count(),
+			'supermanagers_count': supermanagers.count(),
+			'admins_count': admins.count()
+		})
 
 
 def edit_user(request, user_id):

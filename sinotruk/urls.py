@@ -36,4 +36,5 @@ urlpatterns = [
     path('chat/<int:uid>/send_file', send_file_message),
 
     path('activity', activity),
+    path('activity/load', load_activity)
 ]
