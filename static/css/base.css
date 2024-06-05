@@ -930,3 +930,17 @@ input[type='checkbox'] {
 .selected {
     background-color: #006b1b;
 }
+
+.activity_loader_handler {
+    text-align: end;
+    padding: 1rem;
+}
+
+#activity_loader {
+    background-color: #2f89ff;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    border: none;
+    cursor: pointer;
+}

@@ -1,4 +1,6 @@
 import csv
+import os
+
 import pandas as pd
 import openpyxl
 from django.conf import settings
@@ -6,8 +8,10 @@ from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login as user_login, logout as user_logout
 from django.http import FileResponse, JsonResponse
 from .models import *
+from openpyxl import Workbook
 from .forms import *
 from .utils import *
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
 
@@ -622,3 +626,51 @@ def send_file_message(request, uid):
 		'form': FileUploadForm(),
 		'recipient': recipient
 	})
+
+
+@csrf_exempt
+def load_activity_file(request):
+	if request.method == 'POST':
+
+		data = {}
+		for el in request.POST:
+			if request.POST[el].isdigit():
+				user = CustomUser.objects.get(id=int(request.POST[el]))
+
+				if user in data:
+					data[user] += [x for x in Activity.objects.filter(user=user)]
+				else:
+					data[user] = [x for x in Activity.objects.filter(user=user)]
+
+		wb = Workbook()
+		ws1 = wb.active
+		ws1.title = "Дилеры"
+		ws2 = wb.create_sheet("Клиенты")
+		ws3 = wb.create_sheet("Менеджеры")
+		ws4 = wb.create_sheet("Суперменеджеры")
+		ws5 = wb.create_sheet("Админы")
+
+		for user in data:
+			if len(data[user]):
+				sheet = {
+					'DILER': ws1,
+					'CLIENT': ws2,
+					'MANAGER': ws3,
+					'SUPERMANAGER': ws4,
+					'ADMIN': ws5
+				}[user.role]
+				sheet.append([user.username])
+				sheet.append([])
+
+				for act in data[user]:
+					sheet.append(['', str(act.time), str(act.ip), str(act.place), str(act.action)])
+
+				sheet.append([])
+				sheet.append([])
+				sheet.append([])
+
+		filename = settings.BASE_DIR / 'media/documents/activity.xlsx'
+		os.remove(filename)
+		wb.save(filename=filename)
+
+		return JsonResponse({'link': '/media/documents/activity.xlsx'}, status=200)

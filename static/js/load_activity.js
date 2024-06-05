@@ -21,3 +21,29 @@ function update_all(class_, cb) {
         }
     }
 }
+
+function load_act() {
+    let els = document.getElementsByClassName('selected')
+    let query = ''
+    for (let i=0; i < els.length; i++) {
+        let id = els[i].id.replace('user-', '')
+        query += `id${id}=${id}&`
+    }
+
+    query = query.slice(0, query.length-1)
+    console.log(query)
+
+    let xhr = new XMLHttpRequest()
+    xhr.open('POST', '/load_activity', true)
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.responseType = 'json'
+
+    xhr.onload = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            window.location.href = xhr.response['link']
+        }
+    }
+
+    xhr.send(query)
+
+}
