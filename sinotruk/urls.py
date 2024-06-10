@@ -7,6 +7,11 @@ urlpatterns = [
     path('login', login_view),
     path('logout', logout_view),
 
+    path('my_trash', trash),
+    path('add_to_trash/<int:pid>', add_product_to_trash),
+    path('remove_from_trash', remove_from_trash),
+    path('add_order', add_order),
+
     path('managers', managers),
     path('managers/add', add_manager),
 

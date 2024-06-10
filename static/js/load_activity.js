@@ -30,7 +30,13 @@ function load_act() {
         query += `id${id}=${id}&`
     }
 
-    query = query.slice(0, query.length-1)
+    let start = document.getElementById('sdate').value
+    let end = document.getElementById('edate').value
+
+    console.log(start, end)
+    query += `start=${start}&end=${end}`
+
+    //query = query.slice(0, query.length-1)
     console.log(query)
 
     let xhr = new XMLHttpRequest()

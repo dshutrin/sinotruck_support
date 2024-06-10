@@ -138,6 +138,25 @@ class Product(models.Model):
 			'id': self.id
 		}
 
+	def __str__(self):
+		return self.name
+
 	class Meta:
 		verbose_name = 'Товар'
 		verbose_name_plural = 'Товары'
+
+
+class ProductOnTrash(models.Model):
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_trash')
+	product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_trash')
+
+
+class Order(models.Model):
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Заказчик', related_name='orderer')
+	date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+
+class OrderItem(models.Model):
+	order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+	product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')
+	count = models.PositiveIntegerField()

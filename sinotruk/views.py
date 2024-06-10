@@ -1,9 +1,4 @@
-import csv
-import os
-
-import pandas as pd
 import openpyxl
-from django.conf import settings
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login as user_login, logout as user_logout
 from django.http import FileResponse, JsonResponse
@@ -13,6 +8,7 @@ from .forms import *
 from .utils import *
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime
 
 
 def ip_info(addr):
@@ -265,8 +261,13 @@ def pricelist(request):
 	if len(act):
 		update_date = act.last().time
 
+	class pw:
+		def __init__(self, p):
+			self.product = p
+			self.saved = ProductOnTrash.objects.filter(user=request.user, product=p).count() > 0
+
 	if request.method == 'GET':
-		products = Product.objects.all()
+		products = [pw(x) for x in Product.objects.all()]
 
 		return render(request, 'main/pricelist.html', {
 			'update_date': update_date,
@@ -633,14 +634,18 @@ def load_activity_file(request):
 	if request.method == 'POST':
 
 		data = {}
+
+		start = datetime.strptime(request.POST['start'], '%Y-%m-%d').date()
+		end = datetime.strptime(request.POST['end'], '%Y-%m-%d').date()
+
 		for el in request.POST:
 			if request.POST[el].isdigit():
 				user = CustomUser.objects.get(id=int(request.POST[el]))
 
 				if user in data:
-					data[user] += [x for x in Activity.objects.filter(user=user)]
+					data[user] += [x for x in Activity.objects.filter(user=user, time__gte=start, time__lte=end)]
 				else:
-					data[user] = [x for x in Activity.objects.filter(user=user)]
+					data[user] = [x for x in Activity.objects.filter(user=user, time__gte=start, time__lte=end)]
 
 		wb = Workbook()
 		ws1 = wb.active
@@ -674,3 +679,71 @@ def load_activity_file(request):
 		wb.save(filename=filename)
 
 		return JsonResponse({'link': '/media/documents/activity.xlsx'}, status=200)
+
+
+def trash(request):
+	if request.user.is_authenticated:
+
+		products = ProductOnTrash.objects.filter(user=request.user)
+
+		return render(request, 'main/trash.html', {
+			'products': products
+		})
+
+	else:
+		return HttpResponseRedirect('/login')
+
+
+def add_product_to_trash(request, pid):
+	if request.user.is_authenticated:
+
+		if ProductOnTrash.objects.filter(user=request.user, product_id=pid).exists():
+			pass
+		else:
+			prod = Product.objects.get(id=pid)
+			ProductOnTrash.objects.create(user=request.user, product=prod)
+		return JsonResponse({}, status=200)
+
+	else:
+		return HttpResponseRedirect('/login')
+
+
+@csrf_exempt
+def remove_from_trash(request):
+	if request.method == 'POST':
+
+		ps = ProductOnTrash.objects.filter(
+			user=request.user,
+			product__id=int(request.POST.get('pid'))
+		)
+
+		if ps.exists():
+			ps.delete()
+			return JsonResponse({}, status=200)
+		else:
+			return JsonResponse({}, status=404)
+
+	else:
+		return JsonResponse({}, status=500)
+
+
+@csrf_exempt
+def add_order(request):
+	if request.method == 'POST':
+
+		prods = []
+
+		for el in request.POST:
+			prods.append(
+				(Product.objects.get(id=int(el.replace('p', ''))), int(request.POST[el]))
+			)
+
+		order = Order.objects.create(user=request.user)
+
+		for el in prods:
+			OrderItem.objects.create(order=order, product=el[0], count=el[1])
+
+		return JsonResponse({}, status=200)
+
+	else:
+		return JsonResponse({}, status=500)

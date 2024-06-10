@@ -4,6 +4,7 @@ import os
 
 
 def fix_excel(excel_file):
+
     # Создаем временную папку
     tmp_folder = '/tmp/convert_wrong_excel/'
     os.makedirs(tmp_folder, exist_ok=True)
@@ -19,4 +20,5 @@ def fix_excel(excel_file):
 
     # Запаковываем excel обратно в zip и переименовываем в исходный файл
     shutil.make_archive('yourfile', 'zip', tmp_folder)
+    os.remove(excel_file)
     os.rename('yourfile.zip', excel_file)

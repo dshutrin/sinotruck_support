@@ -348,16 +348,16 @@ li > a > button {
 }
 
 .home-info-blocks {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 33% 34% 33%;
 }
 
-.managers-count, .dealers-count, .clients-count {
+.managers-count, .dealers-count, .clients-count, .my_task, .empty, .my_trash {
     background-color: #212529;
     height: 100px;
     color: #e4efff;
 
-    margin: 0 0.5rem;
+    margin: 0.5rem 0.5rem;
     border-radius: 15px;
     padding: 0.5rem;
 
@@ -365,7 +365,7 @@ li > a > button {
     align-items: center;
     justify-content: center;
 
-    width: 33%;
+    width: calc(100% - 2rem);
 }
 
 .add-file-block {
@@ -943,4 +943,193 @@ input[type='checkbox'] {
     margin-top: 1rem;
     border: none;
     cursor: pointer;
+}
+
+#load_act_link {
+    color: #2f89ff;
+    text-align: end;
+}
+
+.date-input-block {
+    text-align: center;
+}
+
+.cb {
+    color: black;
+    padding: 0.3rem 1rem;
+    border-radius: 5px;
+    border: none;
+    font-size: 20px;
+    outline: none;
+    margin: 1rem;
+}
+
+.cardtd {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add_to_card_button {
+    font-size: 30px;
+    font-weight: bolder;
+    background-color: #6da119;
+    color: whitesmoke;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    vertical-align: middle;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.on_card_button {
+    font-size: 18px;
+    font-weight: normal;
+    background-color: #1949a1;
+    color: whitesmoke;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    vertical-align: middle;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.trash-objects {
+    max-height: calc(99vh - 70px - 6rem);
+    overflow-y: scroll;
+    margin: 1rem;
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 1rem;
+    width: calc(100% - 4rem - 2px);
+}
+
+#total-sum {
+    background: rgba(255, 255, 255, 0.47);
+    border-radius: 5px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border: 1px solid rgba(255, 255, 255, 0.68);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    padding: 0.3rem;
+    font-size: 30px;
+    text-align: center;
+}
+
+#buy-button {
+    background-color: #2f89ff;
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.right-block {
+    text-align: center;
+}
+
+.trash-rm-button {
+    background-color: #e35f5f;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+#buy-button:hover {
+    background-color: #006fff;
+}
+
+.product-data-block {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.count {
+    border-top: 1px solid white;
+}
+
+.input-count-prod {
+    text-align: end;
+    margin-bottom: 10px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+    padding: 5px;
+    outline: none;
+    color: black;
+    font-size: 18px;
+    border-radius: 7px;
+    border: none;
+}
+
+.trash-main-content {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+    padding: 5px;
+    border-radius: 7px;
+    border: none;
+    outline: none;
+    color: black;
+    font-size: 18px;
+}
+
+.trash-objects::-webkit-scrollbar {
+    display: none;
+}
+
+.trash-objects > .trash-prod > div {
+    font-size: 18px;
+    width: 100%;
+}
+
+.product-trash-info {
+    min-height: 100px;
+}
+
+.price {
+    text-align: end;
+    border-top: 1px solid whitesmoke;
+}
+
+.trash-prod {
+    background: rgba(255, 255, 255, 0.47);
+    border-radius: 5px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    border: 1px solid rgba(255, 255, 255, 0.68);
+    margin-bottom: 0.5rem;
+    padding: 0.3rem;
+}
+
+.trash-prod:hover {
+    background: rgba(207, 207, 207, 0.47);
 }

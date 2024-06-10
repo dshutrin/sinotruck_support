@@ -1,0 +1,52 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>Моя корзина</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="trash-main-content">
+        <div class="trash-objects">
+            {% for product in products %}
+
+                <div id="product-{{ product.product.id }}" class="trash-prod">
+                    <div class="product-trash-info">
+                        {{ product.product.name }}
+                    </div><br>
+                    <div class="input-count-prod">
+                        <label for="p{{ product.product.id }}">Сколько вы хотите заказать: </label>
+                        <input class="prod-select-count" data-bs-price="{{ product.product.price }}" oninput="update_total_price()" id="p{{ product.product.id }}" type="number" value="0">
+                    </div>
+                    <div class="product-data-block">
+                        <div class="count">
+                            Остаток: {{ product.product.count }}
+                        </div>
+                        <div class="price">
+                            Цена за штуку: {{ product.product.price }}₽
+                        </div>
+                    </div>
+                    <button class="trash-rm-button" onclick="remove_from_trash({{ product.product.id }})">
+                        Удалить из корзины
+                    </button>
+                </div>
+
+            {% endfor %}
+        </div>
+        <div class="right-block">
+            <div id="total-sum">
+                Товары не выбраны
+            </div>
+            <button id="buy-button" type="button" onclick="send_order()">
+                Отправить заявку
+            </button>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/trash.js' %}"></script>
+{% endblock %}

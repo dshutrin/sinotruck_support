@@ -37,3 +37,13 @@ class MessageAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'count')
+
+
+@admin.register(Order)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('user', 'date')
+
+
+@admin.register(OrderItem)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product', 'count')

@@ -45,34 +45,46 @@
                     <th>Остаток</th>
                     <th>Марка</th>
                     <th>Цена</th>
+                    <th>Добавить в корзину</th>
                 </tr>
             </thead>
             <tbody id="tb">
                 {% for prod in products %}
                 <tr>
                     <td>
-                        {% if prod.serial_number %}
-                            {{ prod.serial_number }}
+                        {% if prod.product.serial_number %}
+                            {{ prod.product.serial_number }}
                         {% endif %}
                     </td>
                     <td>
-                        {% if prod.name %}
-                            {{ prod.name }}
+                        {% if prod.product.name %}
+                            {{ prod.product.name }}
                         {% endif %}
                     </td>
                     <td>
-                        {% if prod.count %}
-                            {{ prod.count }}
+                        {% if prod.product.count %}
+                            {{ prod.product.count }}
                         {% endif %}
                     </td>
                     <td>
-                        {% if prod.mark %}
-                            {{ prod.mark }}
+                        {% if prod.product.mark %}
+                            {{ prod.product.mark }}
                         {% endif %}
                     </td>
                     <td>
-                        {% if prod.price %}
-                            {{ prod.price }}
+                        {% if prod.product.price %}
+                            {{ prod.product.price }}
+                        {% endif %}
+                    </td>
+                    <td class="cardtd">
+                        {% if prod.saved %}
+                            <button id="prod-{{ prod.product.id }}" class="on_card_button">
+                                <span>✔</span>
+                            </button>
+                        {% else %}
+                            <button id="prod-{{ prod.product.id }}" class="add_to_card_button" onclick="add_to_card({{ prod.product.id }})">
+                                <span>+</span>
+                            </button>
                         {% endif %}
                     </td>
                 </tr>
