@@ -415,10 +415,13 @@ def files(request):
 	folders = Folder.objects.all()
 	files_ = Document.objects.filter(folder=None)
 
+	print(folders, files_)
+
 	return render(request, 'main/files.html', {
 		'files': files_,
 		'folders': folders,
-		'files_count': files_.count()
+		'files_count': files_.count(),
+		'folders_count': folders.count()
 	})
 
 
