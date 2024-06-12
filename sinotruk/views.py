@@ -747,3 +747,77 @@ def add_order(request):
 
 	else:
 		return JsonResponse({}, status=500)
+
+
+def my_orders(request):
+	if request.user.is_authenticated:
+
+		class OrderView:
+			def __init__(self, order):
+				self.order = order
+				self.items = OrderItem.objects.filter(order=order)
+
+		orders = [OrderView(x) for x in Order.objects.filter(user=request.user)]
+
+		return render(request, 'main/my_orders.html', {
+			'orders': Order.objects.filter(user=request.user)
+		})
+
+	return HttpResponseRedirect('/login')
+
+
+def my_order_detail(request, order_id):
+	if request.user.is_authenticated:
+
+		order = Order.objects.get(id=order_id)
+
+		if order.user == request.user:
+			items = OrderItem.objects.filter(order=order)
+
+			total_price = sum([x.count * x.product.price for x in items])
+
+			return render(request, 'main/order_detail.html', {
+				'order': order,
+				'items': items,
+				'tp': total_price
+			})
+		else:
+			return HttpResponseRedirect('/')
+
+	return HttpResponseRedirect('/login')
+
+
+def order_detail(request, order_id):
+	if request.user.is_authenticated:
+
+		order = Order.objects.get(id=order_id)
+		items = OrderItem.objects.filter(order=order)
+		total_price = sum([x.count * x.product.price for x in items])
+
+		return render(request, 'main/order_detail.html', {
+			'order': order,
+			'items': items,
+			'tp': total_price
+		})
+
+	return HttpResponseRedirect('/login')
+
+
+def main_orders(request):
+	if request.user.is_authenticated:
+
+		class OrderView:
+			def __init__(self, order):
+				self.order = order
+				self.total_price = sum([
+					(x.product.price * x.count) for x in OrderItem.objects.filter(order=order)
+				])
+
+		orders = [OrderView(x) for x in Order.objects.all()]
+
+		return render(request, 'main/orders.html', {
+			'orders': orders
+		})
+
+	else:
+		HttpResponseRedirect('/login')

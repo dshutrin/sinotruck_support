@@ -12,6 +12,11 @@ urlpatterns = [
     path('remove_from_trash', remove_from_trash),
     path('add_order', add_order),
 
+    path('orders', main_orders),
+    path('orders/<int:order_id>', order_detail),
+    path('orders/my', my_orders),
+    path('orders/my/<int:order_id>', my_order_detail),
+
     path('managers', managers),
     path('managers/add', add_manager),
 

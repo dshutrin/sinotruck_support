@@ -1,0 +1,60 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>Заказ №{{ order.id }}</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="my_orders_block">
+
+        <table class="my_table">
+            <thead>
+                <tr>
+                    <th>Номенклатура.Артикул</th>
+                    <th>Ценовая группа/ Номенклатура/ Характеристика номенклатуры</th>
+                    <th>Марка</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prod in items %}
+                    <tr>
+                        <td>
+                            {% if prod.product.serial_number %}
+                                {{ prod.product.serial_number }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if prod.product.name %}
+                                {{ prod.product.name }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if prod.product.mark %}
+                                {{ prod.product.mark }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if prod.product.price %}
+                                {{ prod.product.price }}
+                            {% endif %}
+                        </td>
+                        <td>{{ prod.count }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="5" style="text-align: end">Общая стоимость: {{ tp }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

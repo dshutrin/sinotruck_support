@@ -1133,3 +1133,16 @@ input[type=number] {
 .trash-prod:hover {
     background: rgba(207, 207, 207, 0.47);
 }
+
+.order-tr {
+    cursor: pointer;
+}
+
+.order-tr:hover {
+    background-color: #5e5e5e;
+}
+
+.my_order-link {
+    font-size: 24px;
+    font-weight: bold;
+}

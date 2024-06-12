@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>Заявки</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="orders_block">
+
+        <table class="my_table">
+            <thead>
+                <tr>
+                    <th>№ Заявки</th>
+                    <th>Дата оформления</th>
+                    <th>Заказчик</th>
+                    <th>Общая стоимость</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ord in orders %}
+                    <tr class="order-tr" onclick="window.location.href='orders/{{ ord.order.id }}'">
+                        <td>#{{ ord.order.id }}</td>
+                        <td>{{ ord.order.date }}</td>
+                        <td>{{ ord.order.user.username }}</td>
+                        <td>{{ ord.total_price }}₽</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
