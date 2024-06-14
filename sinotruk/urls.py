@@ -9,6 +9,7 @@ urlpatterns = [
 
     path('my_trash', trash),
     path('add_to_trash/<int:pid>', add_product_to_trash),
+    path('remove_from_trash/<int:pid>', remove_from_trash_by_pid),
     path('remove_from_trash', remove_from_trash),
     path('add_order', add_order),
 

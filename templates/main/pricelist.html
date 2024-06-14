@@ -78,7 +78,7 @@
                     </td>
                     <td class="cardtd">
                         {% if prod.saved %}
-                            <button id="prod-{{ prod.product.id }}" class="on_card_button">
+                            <button id="prod-{{ prod.product.id }}" class="on_card_button" onclick="remove_from_trash({{ prod.product.id }})">
                                 <span>✔</span>
                             </button>
                         {% else %}

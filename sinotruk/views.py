@@ -297,6 +297,8 @@ def pricelist(request):
 				x for x in products if mark in str(x.mark).lower()
 			]
 
+		products = [pw(x) for x in products]
+
 		return render(request, 'main/pricelist.html', {
 			'update_date': update_date,
 			'products': products,
@@ -690,7 +692,8 @@ def trash(request):
 		products = ProductOnTrash.objects.filter(user=request.user)
 
 		return render(request, 'main/trash.html', {
-			'products': products
+			'products': products,
+			'pcount': products.count()
 		})
 
 	else:
@@ -731,6 +734,21 @@ def remove_from_trash(request):
 
 
 @csrf_exempt
+def remove_from_trash_by_pid(request, pid):
+
+	ps = ProductOnTrash.objects.filter(
+		user=request.user,
+		product__id=pid
+	)
+
+	if ps.exists():
+		ps.delete()
+		return JsonResponse({}, status=200)
+	else:
+		return JsonResponse({}, status=404)
+
+
+@csrf_exempt
 def add_order(request):
 	if request.method == 'POST':
 
@@ -745,6 +763,8 @@ def add_order(request):
 
 		for el in prods:
 			OrderItem.objects.create(order=order, product=el[0], count=el[1])
+
+		ProductOnTrash.objects.filter(user=request.user).delete()
 
 		return JsonResponse({}, status=200)
 

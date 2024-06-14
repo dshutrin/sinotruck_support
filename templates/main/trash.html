@@ -9,6 +9,11 @@
 
     <div class="trash-main-content">
         <div class="trash-objects">
+        
+            {% if pcount == 0 %}
+                <h1>Корзина пуста</h1>
+            {% endif %}
+        
             {% for product in products %}
 
                 <div id="product-{{ product.product.id }}" class="trash-prod">
