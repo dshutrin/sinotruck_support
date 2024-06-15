@@ -86,7 +86,7 @@ def home(request):
 
 		return render(request, 'main/home.html', {
 			'managers_count': CustomUser.objects.filter(role='MANAGER').count(),
-			'dealers_count': CustomUser.objects.filter(role='DILER').count(),
+			'DEALER_count': CustomUser.objects.filter(role='DEALER').count(),
 			'clients_count': CustomUser.objects.filter(role='CLIENT').count(),
 			'chats': chats
 		})
@@ -111,8 +111,20 @@ def get_chat(request, user_id):
 		x.read = True
 		x.save()
 
+	#for x in MessageDocument.objects.filter(sender=user, recipient=request.user):
+	#	x.read = True
+	#	x.save()
+
+	class MsgView:
+		def __init__(self, msg):
+			if isinstance(msg, Message):
+				self.type = 'text'
+			else:
+				self.type = 'blob'
+			self.obj = msg
+
 	return render(request, 'main/chat.html', {
-		'messages': sorted(messages, key=lambda x: x.date),
+		'messages': [MsgView(x) for x in sorted(messages, key=lambda x: x.date)],
 		'recipient': user,
 	})
 
@@ -146,10 +158,12 @@ def delete_user(request, user_id):
 
 def managers(request):
 	managers = CustomUser.objects.filter(role='MANAGER')
+	supermanagers = CustomUser.objects.filter(role='SUPERMANAGER')
 
 	return render(request, 'main/managers.html', {
 		'managers': managers,
-		'manager_count': managers.count(),
+		'manager_count': managers.count() + supermanagers.count(),
+		'supermanagers': supermanagers
 	})
 
 
@@ -181,12 +195,12 @@ def add_manager(request):
 		return HttpResponseRedirect('/')
 
 
-def dealers(request):
-	managers = CustomUser.objects.filter(role='DILER')
+def dealer(request):
+	managers = CustomUser.objects.filter(role='DEALER')
 
 	return render(request, 'main/dealers.html', {
-		'dealers': managers,
-		'dealers_count': managers.count(),
+		'DEALER': managers,
+		'DEALER_count': managers.count(),
 	})
 
 
@@ -198,8 +212,9 @@ def add_dealer(request):
 			password = request.POST.get('password')
 			firm = request.POST.get('firm')
 
-			user = CustomUser.objects.create_user(username=username, password=password, role='DEALER', dealer_name=firm)
+			user = CustomUser.objects.create(username=username, password=password, role='DEALER', dealer_name=firm)
 			user.custom_set_password(password)
+			user.role = 'DEALER'
 			user.save()
 
 			Activity.objects.create(
@@ -209,7 +224,7 @@ def add_dealer(request):
 				place=ip_info(request.META['REMOTE_ADDR'])
 			)
 
-			return HttpResponseRedirect('/dealers')
+			return HttpResponseRedirect('/DEALER')
 
 		else:
 			return render(request, 'main/add_dealer.html')
@@ -407,17 +422,21 @@ def folder_detail(request, fid):
 		place=ip_info(request.META['REMOTE_ADDR'])
 	)
 
+	back_link = '/files'
+	if folder.parent_folder:
+		back_link = f'/folders/{folder.parent_folder.id}'
+
 	return render(request, 'main/folder_detail.html', {
 		'files': files_,
-		'folder_title': folder.name
+		'folder': folder,
+		'folders': Folder.objects.filter(parent_folder=folder),
+		'back_link': back_link
 	})
 
 
 def files(request):
-	folders = Folder.objects.all()
+	folders = Folder.objects.filter(parent_folder=None)
 	files_ = Document.objects.filter(folder=None)
-
-	print(folders, files_)
 
 	return render(request, 'main/files.html', {
 		'files': files_,
@@ -453,9 +472,91 @@ def add_file(request):
 				place=ip_info(request.META['REMOTE_ADDR'])
 			)
 
-			return HttpResponseRedirect('/files/' + str(file.id))
+			return HttpResponseRedirect('/files')
 	else:
 		return render(request, 'main/add_file.html', {'form': AddFileForm()})
+
+
+@csrf_exempt
+def update_user_task(request):
+	if request.user.is_authenticated:
+		if request.method == 'POST':
+
+			request.user.sub_role = request.POST.get('task')
+
+			print(request.POST.get('task'))
+
+			request.user.save()
+
+			return JsonResponse({}, status=200)
+
+		else:
+			return JsonResponse({}, status=500)
+	else:
+		return JsonResponse({}, status=500)
+
+
+def add_folder_to_folder(request, folder_id):
+	if request.user.is_authenticated:
+
+		if request.method == 'POST':
+
+			fname = request.POST.get('folder-name')
+
+			f = Folder.objects.create(name=fname, parent_folder=Folder.objects.get(id=folder_id))
+			Activity.objects.create(
+				user=request.user,
+				ip=request.META['REMOTE_ADDR'],
+				action=f'Создание папки "{fname}"',
+				place=ip_info(request.META['REMOTE_ADDR'])
+			)
+
+			return HttpResponseRedirect('/folders/' + str(f.id))
+
+		if request.method == 'GET':
+			return render(request, 'main/add_folder.html', {
+				'folder': Folder.objects.get(id=folder_id)
+			})
+
+	else:
+		return HttpResponseRedirect('/login')
+
+
+def add_file_to_folder(request, folder_id):
+	if request.user.is_authenticated:
+
+		if request.method == 'POST':
+
+			form = AddFileForm(request.POST, request.FILES)
+			if form.is_valid():
+				file = form.save()
+				if file.document.path.endswith('.pdf'):
+					file.file_type = 'pdf'
+				if file.document.path.endswith('.doc'):
+					file.file_type = 'doc'
+				if file.document.path.endswith('.docx'):
+					file.file_type = 'doc'
+				if file.document.path.endswith('.xlsx'):
+					file.file_type = 'xlsx'
+				if file.document.path.split('.')[-1] in ['jpg', 'jpeg', 'png', 'gif']:
+					file.file_type = 'image'
+
+				file.folder = Folder.objects.get(id=folder_id)
+				file.save()
+
+				Activity.objects.create(
+					user=request.user,
+					ip=request.META['REMOTE_ADDR'],
+					action=f'Загрузка файла "{file.title}"',
+					place=ip_info(request.META['REMOTE_ADDR'])
+				)
+
+				return HttpResponseRedirect('/folders/' + str(folder_id))
+		else:
+			return render(request, 'main/add_file.html', {'form': AddFileForm()})
+
+	else:
+		return HttpResponseRedirect('/login')
 
 
 def get_document(request, doc_id):
@@ -473,19 +574,19 @@ def get_document(request, doc_id):
 
 def activity(request):
 	managers = CustomUser.objects.filter(role='MANAGER')
-	dilers = CustomUser.objects.filter(role='DILER')
+	DEALER = CustomUser.objects.filter(role='DEALER')
 	clients = CustomUser.objects.filter(role='CLIENT')
 	supermanagers = CustomUser.objects.filter(role='SUPERMANAGER')
 	admins = CustomUser.objects.filter(role='ADMIN')
 
 	return render(request, 'main/activity.html', {
 		'managers': managers,
-		'dilers': dilers,
+		'DEALER': DEALER,
 		'clients': clients,
 		'supermanagers': supermanagers,
 		'admins': admins,
 		'managers_count': managers.count(),
-		'dilers_count': dilers.count(),
+		'DEALER_count': DEALER.count(),
 		'clients_count': clients.count(),
 		'supermanagers_count': supermanagers.count(),
 		'admins_count': admins.count()
@@ -495,19 +596,19 @@ def activity(request):
 def load_activity(request):
 	if request.method == "GET":
 		managers = CustomUser.objects.filter(role='MANAGER')
-		dilers = CustomUser.objects.filter(role='DILER')
+		DEALER = CustomUser.objects.filter(role='DEALER')
 		clients = CustomUser.objects.filter(role='CLIENT')
 		supermanagers = CustomUser.objects.filter(role='SUPERMANAGER')
 		admins = CustomUser.objects.filter(role='ADMIN')
 
 		return render(request, 'main/load_activity.html', {
 			'managers': managers,
-			'dilers': dilers,
+			'DEALER': DEALER,
 			'clients': clients,
 			'supermanagers': supermanagers,
 			'admins': admins,
 			'managers_count': managers.count(),
-			'dilers_count': dilers.count(),
+			'DEALER_count': DEALER.count(),
 			'clients_count': clients.count(),
 			'supermanagers_count': supermanagers.count(),
 			'admins_count': admins.count()
@@ -521,7 +622,7 @@ def edit_user(request, user_id):
 		if user.role == 'MANAGER':
 			form = EditManagerForm(instance=user)
 			return render(request, 'main/edit_user.html', {'user': user, 'form': form})
-		elif user.role == 'DILER':
+		elif user.role == 'DEALER':
 			form = EditDealerForm(instance=user)
 			return render(request, 'main/edit_user.html', {'user': user, 'form': form})
 		elif user.role == 'CLIENT':
@@ -556,7 +657,7 @@ def edit_user(request, user_id):
 			else:
 				return render(request, 'main/edit_user.html', {'user': user, 'form': form})
 
-		elif user.role == 'DILER':
+		elif user.role == 'DEALER':
 			form = EditDealerForm(instance=user, data=request.POST)
 
 			if form.is_valid():
@@ -568,7 +669,7 @@ def edit_user(request, user_id):
 				user.dealer_name = form.cleaned_data['dealer_name']
 				user.custom_set_password(form.cleaned_data['clear_password'])
 
-				return HttpResponseRedirect('/dealers')
+				return HttpResponseRedirect('/DEALER')
 
 			else:
 				return render(request, 'main/edit_user.html', {'user': user, 'form': form})
@@ -663,7 +764,7 @@ def load_activity_file(request):
 		for user in data:
 			if len(data[user]):
 				sheet = {
-					'DILER': ws1,
+					'DEALER': ws1,
 					'CLIENT': ws2,
 					'MANAGER': ws3,
 					'SUPERMANAGER': ws4,
@@ -844,3 +945,16 @@ def main_orders(request):
 
 	else:
 		HttpResponseRedirect('/login')
+
+
+def contacts(request):
+	if request.user.is_authenticated:
+
+		users = CustomUser.objects.all().order_by('role')
+
+		return render(request, 'main/contacts.html', {
+			"users": users
+		})
+
+	else:
+		return HttpResponseRedirect('/login')

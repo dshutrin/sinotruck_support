@@ -2,10 +2,31 @@ function update_total_price() {
     let inputs = document.getElementsByClassName('prod-select-count')
 
     let total_price = 0
+    let good = true
 
     for (let i=0; i<inputs.length; i++) {
         total_price += parseFloat(inputs[i].getAttribute('data-bs-price')) * inputs[i].value
+
+        if (inputs[i].value > inputs[i].getAttribute('max')) {
+            inputs[i].style.backgroundColor = 'red'
+            good = false
+        } else {
+            inputs[i].style.backgroundColor = 'white'
+        }
     }
+
+    for (let i=0; i<inputs.length; i++) {
+        if (inputs[i].value === '') {
+            good = false
+        } else {
+            inputs[i].style.backgroundColor = 'white'
+        }
+    }
+
+    if (good === false)
+        document.getElementById('buy-button').style.display = 'none'
+    else
+        document.getElementById('buy-button').style.display = 'inline-block'
 
     document.getElementById('total-sum').innerHTML = 'Итого: ' + total_price
 

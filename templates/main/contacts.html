@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>Моя корзина</h1>
+{% endblock %}
+
+{% block content %}
+
+    <div class="contacts-block">
+
+        <table class="my_table">
+            <thead>
+                <tr>
+                    <th>Имя пользователя</th>
+                    <th>Должность</th>
+                    <th>Задача</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>
+                            {% if user.sub_role %}
+                            {{ user.sub_role }}
+                            {% endif %}
+                        </td>
+                        <td style="text-align: center"><a class="chat_from_cnotacts" href="/chat/{{ user.id }}">Чат</a></td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}

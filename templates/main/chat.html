@@ -13,23 +13,23 @@
 
                 {% for message in messages %}
 
-                    {% if message.sender == request.user %}
+                    {% if message.obj.sender == request.user %}
                         <div class="my_message">
                             <div class="message">
                                 <div class="message-body">
-                                    {% if message.text %}
-                                        <span>{{ message.text }}</span>
+                                    {% if message.type == 'text' %}
+                                        <span>{{ message.obj.text }}</span>
                                     {% else %}
                                         <span>
                                             <span class="material-symbols-outlined">
                                                 attach_file
                                             </span>
-                                            <a target="_blank" href="{{ message.document.url }}">{{ message.get_text }}</a>
+                                            <a target="_blank" href="{{ message.obj.document.url }}">{{ message.obj.get_text }}</a>
                                         </span>
                                     {% endif %}
                                 </div>
                                 <div class="message-info">
-                                    <span>Вы: {{ message.date }}</span>
+                                    <span>Вы: {{ message.obj.date }}</span>
                                 </div>
                             </div>
                         </div>
@@ -37,10 +37,19 @@
                         <div class="other_message">
                             <div class="message">
                                 <div class="message-body">
-                                    <span>{{ message.text }}</span>
+                                    {% if message.type == 'text' %}
+                                        <span>{{ message.obj.text }}</span>
+                                    {% else %}
+                                        <span>
+                                            <span class="material-symbols-outlined">
+                                                attach_file
+                                            </span>
+                                            <a target="_blank" href="{{ message.obj.document.url }}">{{ message.obj.get_text }}</a>
+                                        </span>
+                                    {% endif %}
                                 </div>
                                 <div class="message-info">
-                                    <span>{{ recipient.username }}: {{ message.date }}</span>
+                                    <span>{{ recipient.username }}: {{ message.obj.date }}</span>
                                 </div>
                             </div>
                         </div>

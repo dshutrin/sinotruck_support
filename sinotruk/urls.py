@@ -6,6 +6,7 @@ urlpatterns = [
     path('', home),
     path('login', login_view),
     path('logout', logout_view),
+    path('users/update_task', update_user_task),
 
     path('my_trash', trash),
     path('add_to_trash/<int:pid>', add_product_to_trash),
@@ -18,10 +19,12 @@ urlpatterns = [
     path('orders/my', my_orders),
     path('orders/my/<int:order_id>', my_order_detail),
 
+    path('contacts', contacts),
+
     path('managers', managers),
     path('managers/add', add_manager),
 
-    path('dealers', dealers),
+    path('dealers', dealer),
     path('dealers/add', add_dealer),
 
     path('clients', clients),
@@ -36,6 +39,9 @@ urlpatterns = [
 
     path('folders/add', add_folder),
     path('folders/<int:fid>', folder_detail),
+
+    path('folders/<int:folder_id>/add_folder', add_folder_to_folder),
+    path('folders/<int:folder_id>/add_file', add_file_to_folder),
 
     path('users/<int:user_id>', get_user_details),
     path('users/<int:user_id>/delete', delete_user),

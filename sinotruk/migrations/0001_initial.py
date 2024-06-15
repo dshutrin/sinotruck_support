@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True)),
                 ('name', models.CharField(default=None, max_length=150, null=True, verbose_name='Имя')),
                 ('surname', models.CharField(blank=True, default=None, max_length=150, null=True, verbose_name='Фамилия')),
-                ('role', models.CharField(choices=[('ADMIN', 'admin'), ('SUPERMANAGER', 'supermanager'), ('MANAGER', 'manager'), ('DILER', 'diler'), ('CLIENT', 'client')], default='CLIENT', max_length=150, null=True, verbose_name='Роль')),
+                ('role', models.CharField(choices=[('ADMIN', 'admin'), ('SUPERMANAGER', 'supermanager'), ('MANAGER', 'manager'), ('DEALER', 'dealer'), ('CLIENT', 'client')], default='CLIENT', max_length=150, null=True, verbose_name='Роль')),
             ],
             options={
                 'verbose_name': 'Пользователь',

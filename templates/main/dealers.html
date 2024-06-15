@@ -15,7 +15,7 @@
         </div>
     {% endif %}
 
-    {% if dealers_count > 0 %}
+    {% if DEALER_count > 0 %}
         <table class="users-table">
             <thead><tr>
                 <th class="del-td"></th>
@@ -27,7 +27,7 @@
                 <th>Пароль</th>
             </tr></thead>
             <tbody>
-                {% for dealer in dealers %}
+                {% for dealer in DEALER %}
                     <tr>
                         <td class="del-td">
                             <button type="button" class="mini-link chat_button" onclick="window.location.href = '/chat/{{ dealer.id }}'">Chat</button>

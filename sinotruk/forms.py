@@ -22,7 +22,7 @@ class EditUserForm(forms.ModelForm):
         super(EditUserForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({
-                'required': 'required', 'class': 'form-control-input'
+                'class': 'form-control-input'
             })
 
     class Meta:
@@ -41,6 +41,8 @@ class EditManagerForm(EditUserForm):
 
 
 class EditDealerForm(EditUserForm):
+
+
     class Meta:
         model = CustomUser
         exclude = (

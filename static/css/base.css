@@ -170,7 +170,7 @@ li > a > button {
 }
 
 .content::-webkit-scrollbar {
-    display: none;
+    width: 7px;
 }
 
 .add-manager-block {
@@ -291,6 +291,7 @@ li > a > button {
 }
 
 .files-block {
+    margin-top: 1rem;
     display: grid;
     grid-template-columns: 20% 20% 20% 20% 20%;
 }
@@ -352,7 +353,7 @@ li > a > button {
     grid-template-columns: 33% 34% 33%;
 }
 
-.managers-count, .dealers-count, .clients-count, .my_task, .empty, .my_trash {
+.managers-count, .DEALER-count, .clients-count, .my_task, .empty, .my_trash {
     background-color: #212529;
     height: 100px;
     color: #e4efff;
@@ -417,7 +418,7 @@ input[type=file] {
 }
 
 #choice_file::-webkit-scrollbar {
-    display: none;
+    width: 7px;
 }
 
 #file_button {
@@ -543,8 +544,9 @@ input[type=file] {
 
 .chat {
     height: 100px;
-    width: calc(100% - 1rem);
+    width: calc(100% - 2rem);
     padding: 0.5rem;
+    margin: 0.5rem;
 
     background-color: #212529;
     color: #e4efff;
@@ -574,7 +576,17 @@ input[type=file] {
 }
 
 .user-chat::-webkit-scrollbar {
-    display: none;
+  width: 10px;
+}
+
+.user-chat::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+.user-chat::-webkit-scrollbar-thumb {
+  background: rgba(207, 207, 207, 0.63);
+  border-radius: 10px;
 }
 
 .messages {
@@ -585,7 +597,17 @@ input[type=file] {
 }
 
 .messages::-webkit-scrollbar {
-    display: none;
+  width: 10px;
+}
+
+.messages::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: rgba(207, 207, 207, 0.63);
+  border-radius: 10px;
 }
 
 .toolbar {
@@ -880,6 +902,7 @@ th, td {
     border: 1px solid gray;
     border-radius: 10px;
 }
+
 #scrolled_table::-webkit-scrollbar {
   width: 10px;
 }
@@ -890,6 +913,20 @@ th, td {
 }
 
 #scrolled_table::-webkit-scrollbar-thumb {
+  background: rgba(207, 207, 207, 0.63);
+  border-radius: 10px;
+}
+
+.chats-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.chats-list::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+.chats-list::-webkit-scrollbar-thumb {
   background: rgba(207, 207, 207, 0.63);
   border-radius: 10px;
 }
@@ -945,9 +982,16 @@ input[type='checkbox'] {
     cursor: pointer;
 }
 
-#load_act_link {
-    color: #2f89ff;
+#load_act_link_block {
     text-align: end;
+}
+
+#load_act_link {
+    color: whitesmoke;
+    padding: 0.2rem 1rem;
+    text-align: end;
+    background-color: #2f89ff;
+    border-radius: 10px;
 }
 
 .date-input-block {
@@ -984,6 +1028,20 @@ input[type='checkbox'] {
     height: 50px;
     width: 50px;
     cursor: pointer;
+}
+
+.trash-objects::-webkit-scrollbar {
+  width: 10px;
+}
+
+.trash-objects::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+.trash-objects::-webkit-scrollbar-thumb {
+  background: rgba(207, 207, 207, 0.63);
+  border-radius: 10px;
 }
 
 .on_card_button {
@@ -1101,10 +1159,6 @@ input[type=number] {
     font-size: 18px;
 }
 
-.trash-objects::-webkit-scrollbar {
-    display: none;
-}
-
 .trash-objects > .trash-prod > div {
     font-size: 18px;
     width: 100%;
@@ -1145,4 +1199,34 @@ input[type=number] {
 .my_order-link {
     font-size: 24px;
     font-weight: bold;
+}
+
+.chat_from_cnotacts {
+    background-color: #2f89ff;
+    color: whitesmoke;
+    border-radius: 5px;
+    padding: 0 1rem;
+}
+
+.user-sub-role-input {
+    background-color: inherit;
+    color: white;
+    border: none;
+    outline: none;
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+}
+
+.supermanager-tr {
+    background-color: rgba(47, 137, 255, 0.51);
+}
+
+.block-back-on-folder > a {
+    margin: 0.5rem;
+    padding: 0.3rem 1rem;
+    font-size: 20px;
+    background-color: #2f89ff;
+    color: white;
+    border-radius: 10px;
 }

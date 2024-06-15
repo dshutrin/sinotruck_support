@@ -7,7 +7,7 @@ ROLES_CHOICES = (
 	("ADMIN", "admin"),
 	("SUPERMANAGER", "supermanager"),
 	("MANAGER", "manager"),
-	('DILER', 'diler'),
+	('DEALER', 'DEALER'),
 	("CLIENT", "client"),
 )
 
@@ -58,6 +58,7 @@ class CustomUser(AbstractBaseUser):
 
 
 class Folder(models.Model):
+	parent_folder = models.ForeignKey('Folder', on_delete=models.CASCADE, related_name='folder_parent_folder', default=None, null=True, blank=True)
 	name = models.CharField(verbose_name="Папка", max_length=150, unique=True)
 
 	class Meta:

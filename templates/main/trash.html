@@ -21,8 +21,16 @@
                         {{ product.product.name }}
                     </div><br>
                     <div class="input-count-prod">
-                        <label for="p{{ product.product.id }}">Сколько вы хотите заказать: </label>
-                        <input class="prod-select-count" data-bs-price="{{ product.product.price }}" oninput="update_total_price()" id="p{{ product.product.id }}" type="number" value="0">
+                        <label for="p{{ product.product.id }}">Сколько вы хотите заказать (остаток: {{ product.product.count }}): </label>
+                        <input
+                            class="prod-select-count"
+                            data-bs-price="{{ product.product.price }}"
+                            oninput="update_total_price()"
+                            id="p{{ product.product.id }}"
+                            type="number"
+                            placeholder="0"
+                            max="{{ product.product.count }}"
+                        >
                     </div>
                     <div class="product-data-block">
                         <div class="count">
@@ -40,10 +48,13 @@
             {% endfor %}
         </div>
         <div class="right-block">
+            <div>
+                Чтобы оформить заказ, необходимо выбрать хотя-бы 1 шт каждого товара из корзины и не превышать остатка
+            </div>
             <div id="total-sum">
                 Товары не выбраны
             </div>
-            <button id="buy-button" type="button" onclick="send_order()">
+            <button style="display: none" id="buy-button" type="button" onclick="send_order()">
                 Отправить заявку
             </button>
         </div>

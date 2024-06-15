@@ -6,14 +6,14 @@
 
 {% block content %}
 
-    <h1 id="load_act_link"><a id="load_act_link" href="/activity/load">Скачать данные об активности</a></h1>
+    <h1 id="load_act_link_block"><a id="load_act_link" href="/activity/load">Скачать данные об активности</a></h1>
 
     <div class="activity_users_block">
-        {% if dilers_count > 0 %}
+        {% if DEALER_count > 0 %}
         <div class="role-block">
             <h1>Дилеры</h1>
             <div class="users-list">
-                {% for user in dilers %}
+                {% for user in DEALER %}
                     <a href="/user_history/{{ user.id }}" class="user-activity-link">
                         {{ user.username }}
                     </a>

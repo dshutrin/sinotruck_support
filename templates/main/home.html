@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block navbar %}
     <h1>Главная</h1>
@@ -12,15 +13,27 @@
         <div class="managers-count">
             <h2>Количество менеджеров: {{ managers_count }}</h2>
         </div>
-        <div class="dealers-count">
-            <h2>Количество дилеров: {{ dealers_count }}</h2>
+        <div class="DEALER-count">
+            <h2>Количество дилеров: {{ DEALER_count }}</h2>
         </div>
         <div class="clients-count">
             <h2>Количество клиентов: {{ clients_count }}</h2>
         </div>
 
-        <div class="my_task">
-            <h2>Не назначено</h2>
+        <div id="my_task" class="my_task">
+            <h2>
+                <input
+                        id="my_task_input"
+                        class="user-sub-role-input"
+                        type="text"
+                        {% if request.user.sub_role %}
+                            value="{{ request.user.sub_role }}"
+                        {% else %}
+                            placeholder="Введите свою задачу"
+                        {% endif %}
+                        onchange="update_my_task()"
+                >
+            </h2>
         </div>
         <a href="/orders/my" class="empty my_order-link">
             Мои заказы
@@ -48,4 +61,8 @@
 
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/home.js' %}"></script>
 {% endblock %}
