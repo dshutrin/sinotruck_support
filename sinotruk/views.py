@@ -958,3 +958,9 @@ def contacts(request):
 
 	else:
 		return HttpResponseRedirect('/login')
+
+
+def activity_stats(request):
+	return render(request, 'main/activity_stats.html', {
+
+	})

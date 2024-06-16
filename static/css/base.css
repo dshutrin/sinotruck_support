@@ -948,7 +948,7 @@ th, td {
     align-items: center;
     justify-content: center;
     margin: 1rem;
-
+    overflow-x: hidden;
 }
 
 input[type='checkbox'] {
@@ -984,9 +984,14 @@ input[type='checkbox'] {
 
 #load_act_link_block {
     text-align: end;
+    font-size: 16px;
 }
 
-#load_act_link {
+#stats_act_link {
+    margin-right: 0.5rem;
+}
+
+#load_act_link, #stats_act_link {
     color: whitesmoke;
     padding: 0.2rem 1rem;
     text-align: end;
@@ -1229,4 +1234,18 @@ input[type=number] {
     background-color: #2f89ff;
     color: white;
     border-radius: 10px;
+}
+
+.find-activity-user-block > input {
+    background-color: inherit;
+    outline: 2px solid rgba(71, 71, 71, 0.76);
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    padding: 0.2rem 0.5rem;
+}
+
+.find-activity-user-block > label {
+    font-size: 18px;
+    padding-right: 1rem;
 }

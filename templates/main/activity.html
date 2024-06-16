@@ -1,4 +1,5 @@
 {% extends 'main/base.html' %}
+{% load static %}
 
 {% block navbar %}
     <h1>Активность</h1>
@@ -6,7 +7,15 @@
 
 {% block content %}
 
-    <h1 id="load_act_link_block"><a id="load_act_link" href="/activity/load">Скачать данные об активности</a></h1>
+    <div id="load_act_link_block">
+        <a id="stats_act_link" href="/activity/stats">Статистика</a>
+        <a id="load_act_link" href="/activity/load">Скачать данные об активности</a>
+    </div>
+
+    <div class="find-activity-user-block">
+        <label for="fau">Поиск пользователя: </label>
+        <input id="fau" type="text" placeholder="username" oninput="search_user()">
+    </div>
 
     <div class="activity_users_block">
         {% if DEALER_count > 0 %}
@@ -72,4 +81,8 @@
 
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/activity.js' %}"></script>
 {% endblock %}

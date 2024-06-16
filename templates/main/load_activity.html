@@ -15,6 +15,11 @@
         <input id="sdate" class="cb" type="date">
         <input id="edate" class="cb" type="date">
     </div>
+    
+    <div class="find-activity-user-block">
+        <label for="fau">Поиск пользователя: </label>
+        <input id="fau" type="text" placeholder="username" oninput="search_user()">
+    </div>
 
     <div class="activity_users_block">
         {% if DEALER_count > 0 %}

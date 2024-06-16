@@ -34,8 +34,6 @@ function load_act() {
     let end = document.getElementById('edate').value
     query += `start=${start}&end=${end}`
 
-    //query = query.slice(0, query.length-1)
-
     let xhr = new XMLHttpRequest()
     xhr.open('POST', '/load_activity', true)
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -50,3 +48,23 @@ function load_act() {
     xhr.send(query)
 
 }
+
+
+function search_user() {
+    let username = document.getElementById('fau').value
+
+    let users = document.getElementsByClassName('user-activity-link')
+
+    for (let i=0; i<users.length; i++) {
+
+        console.log(users[i].textContent)
+
+        if (!users[i].textContent.includes(username)) {
+            users[i].style.display = 'none'
+        } else {
+            users[i].style.display = 'flex'
+        }
+    }
+
+}
+

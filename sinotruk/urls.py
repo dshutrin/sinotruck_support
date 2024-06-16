@@ -53,6 +53,7 @@ urlpatterns = [
     path('chat/<int:uid>/send_file', send_file_message),
 
     path('activity', activity),
+    path('activity/stats', activity_stats),
     path('activity/load', load_activity),
     path('load_activity', load_activity_file)
 ]
