@@ -1249,3 +1249,13 @@ input[type=number] {
     font-size: 18px;
     padding-right: 1rem;
 }
+
+.activity-stat-block {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.act-table {
+    width: calc(100% - 1rem);
+    margin: 0.5rem;
+}

@@ -628,6 +628,9 @@ def edit_user(request, user_id):
 		elif user.role == 'CLIENT':
 			form = EditClientForm(instance=user)
 			return render(request, 'main/edit_user.html', {'user': user, 'form': form})
+		elif user.role == 'SUPERMANAGER':
+			form = EditManagerForm(instance=user)
+			return render(request, 'main/edit_user.html', {'user': user, 'form': form})
 		else:
 			return HttpResponseRedirect('/')
 
@@ -961,6 +964,26 @@ def contacts(request):
 
 
 def activity_stats(request):
-	return render(request, 'main/activity_stats.html', {
 
+	users = CustomUser.objects.all().order_by('role').exclude(role__in=['ADMIN'])
+
+	class UserLogin:
+		def __init__(self, user):
+			self.user = user
+			self.count = Activity.objects.filter(user=user, action='Авторизация').count()
+
+	class UserMessageCounter:
+		def __init__(self, user):
+			self.user = user
+			self.count = Message.objects.filter(sender=user).count() + MessageDocument.objects.filter(sender=user).count()
+
+	data = []
+	msgs = []
+	for user in users:
+		data.append(UserLogin(user))
+		msgs.append(UserMessageCounter(user))
+
+	return render(request, 'main/activity_stats.html', {
+		'logins': data,
+		'messages': msgs
 	})
