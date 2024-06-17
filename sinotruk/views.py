@@ -88,7 +88,8 @@ def home(request):
 			'managers_count': CustomUser.objects.filter(role='MANAGER').count(),
 			'DEALER_count': CustomUser.objects.filter(role='DEALER').count(),
 			'clients_count': CustomUser.objects.filter(role='CLIENT').count(),
-			'chats': chats
+			'chats': chats,
+			'staff': request.user.role in ['ADMIN', 'MAGAER', 'SUPERMANAGER']
 		})
 
 	return HttpResponseRedirect('/login')
@@ -313,11 +314,13 @@ def pricelist(request):
 			]
 
 		products = [pw(x) for x in products]
+		staff = request.user.role in ['ADMIN', 'MANAGER', 'SUPERMANAGER']
 
 		return render(request, 'main/pricelist.html', {
 			'update_date': update_date,
 			'products': products,
-			'n': nom, 'c': char, 'm': mark
+			'n': nom, 'c': char, 'm': mark,
+			'staff': staff
 		})
 
 
@@ -437,12 +440,14 @@ def folder_detail(request, fid):
 def files(request):
 	folders = Folder.objects.filter(parent_folder=None)
 	files_ = Document.objects.filter(folder=None)
+	staff = request.user.role in ['ADMIN', 'MANAGER', 'SUPERMANAGER']
 
 	return render(request, 'main/files.html', {
 		'files': files_,
 		'folders': folders,
 		'files_count': files_.count(),
-		'folders_count': folders.count()
+		'folders_count': folders.count(),
+		'staff': staff
 	})
 
 

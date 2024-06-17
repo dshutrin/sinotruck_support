@@ -9,7 +9,9 @@
 
     <div id="load_act_link_block">
         <a id="stats_act_link" href="/activity/stats">Статистика</a>
-        <a id="load_act_link" href="/activity/load">Скачать данные об активности</a>
+        {% if request.user.role == 'ADMIN' %}
+            <a id="load_act_link" href="/activity/load">Скачать данные об активности</a>
+        {% endif %}
     </div>
 
     <div class="find-activity-user-block">

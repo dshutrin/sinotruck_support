@@ -6,13 +6,15 @@
 {% endblock %}
 
 {% block content %}
-
+    
+    {% if staff %}
     <div class="pricelist-info-block">
         <h1>Обновлён {{ update_date }}</h1>
         <div class="add-link">
             <a href="/add_pricelist">Обновить прайс-лист</a>
         </div>
     </div>
+    {% endif %}
 
     <div class="product-find-block">
         <form method="post">
@@ -45,7 +47,9 @@
                     <th>Остаток</th>
                     <th>Марка</th>
                     <th>Цена</th>
-                    <th>Добавить в корзину</th>
+                    {% if staff %}
+                        <th>Добавить в корзину</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody id="tb">
@@ -76,17 +80,19 @@
                             {{ prod.product.price }}
                         {% endif %}
                     </td>
-                    <td class="cardtd">
-                        {% if prod.saved %}
-                            <button id="prod-{{ prod.product.id }}" class="on_card_button" onclick="remove_from_trash({{ prod.product.id }})">
-                                <span>✔</span>
-                            </button>
-                        {% else %}
-                            <button id="prod-{{ prod.product.id }}" class="add_to_card_button" onclick="add_to_card({{ prod.product.id }})">
-                                <span>+</span>
-                            </button>
-                        {% endif %}
-                    </td>
+                    {% if staff %}
+                        <td class="cardtd">
+                            {% if prod.saved %}
+                                <button id="prod-{{ prod.product.id }}" class="on_card_button" onclick="remove_from_trash({{ prod.product.id }})">
+                                    <span>✔</span>
+                                </button>
+                            {% else %}
+                                <button id="prod-{{ prod.product.id }}" class="add_to_card_button" onclick="add_to_card({{ prod.product.id }})">
+                                    <span>+</span>
+                                </button>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>

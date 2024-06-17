@@ -19,8 +19,10 @@
             <thead><tr>
                 <th class="del-td"></th>
                 <th class="del-td"></th>
-                <th class="del-td"></th>
-                <th class="del-td"></th>
+                {% if request.user.role == 'ADMIN' %}
+                    <th class="del-td"></th>
+                    <th class="del-td"></th>
+                {% endif %}
                 <th>Имя пользователя</th>
                 <th>Имя, Фамилия</th>
                 <th>Пароль</th>
@@ -35,12 +37,14 @@
                         <td class="del-td">
                             <button type="button" class="mini-link history_button" onclick="window.location.href = '/user_history/{{ manager.id }}'">History</button>
                         </td>
+                        {% if request.user.role == 'ADMIN' %}
                         <td class="del-td">
                             <button type="button" class="mini-link rm_button" onclick="show_confirm_delete_user_modal({{ manager.id }})">Delete</button>
                         </td>
                         <td class="del-td">
                             <a class="mini-link edit_button" href="/edituser/{{ manager.id }}">Edit</a>
                         </td>
+                        {% endif %}
                         <td>{{ manager.username }}</td>
                         <td>{{ manager.name }} {{ manager.surname }}</td>
                         <td>{{ manager.clear_password }}</td>
