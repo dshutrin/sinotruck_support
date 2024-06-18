@@ -7,6 +7,7 @@ urlpatterns = [
     path('login', login_view),
     path('logout', logout_view),
     path('users/update_task', update_user_task),
+    path('edit_me', edit_me),
 
     path('my_trash', trash),
     path('add_to_trash/<int:pid>', add_product_to_trash),
@@ -39,6 +40,7 @@ urlpatterns = [
 
     path('folders/add', add_folder),
     path('folders/<int:fid>', folder_detail),
+    path('folders/<int:fid>/delete', delete_folder),
 
     path('folders/<int:folder_id>/add_folder', add_folder_to_folder),
     path('folders/<int:folder_id>/add_file', add_file_to_folder),

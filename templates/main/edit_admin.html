@@ -1,0 +1,68 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block navbar %}
+    <h1>Изменение настроек аккаунта</h1>
+{% endblock %}
+
+
+{% block content %}
+
+    <form method="post" class="edit-admin-form">
+
+        <div class="input-block">
+            <label for="username">Имя пользователя</label>
+            <input id="username" type="text" name="username" value="{{ request.user.username }}">
+        </div>
+    
+        <div class="input-block">
+            <label for="name">Имя</label>
+            <input id="name" type="text" name="name"
+                   {% if request.user.name %}
+                   value="{{ request.user.name }}"
+                   {% endif %}
+            >
+        </div>
+    
+        <div class="input-block">
+            <label for="surname">Фамилия</label>
+            <input id="surname" type="text" name="surname"
+                   {% if request.user.surname %}
+                   value="{{ request.user.surname }}"
+                   {% endif %}
+            >
+        </div>
+
+        <div class="input-block">
+            <label for="password">Пароль</label>
+            <input id="password" type="text" name="password" value="{{ request.user.clear_password }}">
+        </div>
+
+        <div class="input-block">
+            <label for="sub_role">Задача</label>
+            <input id="sub_role" type="text" name="sub_role"
+                   {% if request.user.sub_role %}
+                       value="{{ request.user.sub_role }}"
+                   {% endif %}
+                    placeholder="Не назначено"
+            >
+        </div>
+
+        {% if error %}
+        <div class="errors-block">
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        {% csrf_token %}
+
+        <button id="save-admin-button" type="submit">Сохранить изменения</button>
+
+    </form>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+{% endblock %}

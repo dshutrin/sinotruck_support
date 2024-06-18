@@ -21,6 +21,15 @@
                 <input class="form-control-input" id="password" type="text" name="password" required>
                 <div class="labelline" for="password">Пароль</div>
             </div>
+
+
+            {% if error %}
+                <div class="errors-block">
+                    <span class="error-span">{{ error }}</span>
+                </div>
+            {% endif %}
+
+
             <div class="button-block">
                 <button id="submit-button" type="submit">Добавить</button>
             </div>

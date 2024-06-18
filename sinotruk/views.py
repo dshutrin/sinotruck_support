@@ -48,7 +48,7 @@ def login_view(request):
 				return HttpResponseRedirect('/')
 
 			else:
-				return render(request, 'main/login.html')
+				return render(request, 'main/login.html', {'error': 'Пользователь с такими параметрами не найден!'})
 
 		else:
 			return render(request, 'main/login.html')
@@ -64,6 +64,57 @@ def logout_view(request):
 
 	user_logout(request)
 	return HttpResponseRedirect('/login')
+
+
+def edit_me(request):
+	if request.user.role == 'ADMIN':
+		if request.method == 'GET':
+			return render(request, 'main/edit_admin.html')
+		elif request.method == 'POST':
+
+			username = request.POST.get('username')
+			password = request.POST.get('password')
+			sub_role = request.POST.get('sub_role')
+			name = request.POST.get('name')
+			surname = request.POST.get('surname')
+
+			error = None
+
+			if request.user.username != username:
+				if CustomUser.objects.filter(username=username).exists():
+					error = 'Пользователь с таким именем пользователя уже существует!'
+				else:
+
+					Activity.objects.create(
+						user=request.user,
+						action=f'Смена имени пользователя с "{request.user.username}" на "{username}"',
+						ip=request.META['REMOTE_ADDR'],
+						place=ip_info(request.META['REMOTE_ADDR'])
+					)
+
+					request.user.username = username
+					request.user.name = name
+					request.user.surname = surname
+					request.user.sub_role = sub_role
+					request.user.custom_set_password(password)
+
+					user = authenticate(request, username=username, password=password)
+					if user is not None:
+						user_login(request, user)
+
+					return HttpResponseRedirect('/')
+
+			else:
+				request.user.name = name
+				request.user.surname = surname
+				request.user.sub_role = sub_role
+				request.user.custom_set_password(password)
+
+				user = authenticate(request, username=username, password=password)
+				if user is not None:
+					user_login(request, user)
+
+				return render(request, 'main/edit_admin.html', {'error': error})
 
 
 def home(request):
@@ -213,19 +264,22 @@ def add_dealer(request):
 			password = request.POST.get('password')
 			firm = request.POST.get('firm')
 
-			user = CustomUser.objects.create(username=username, password=password, role='DEALER', dealer_name=firm)
-			user.custom_set_password(password)
-			user.role = 'DEALER'
-			user.save()
+			try:
+				user = CustomUser.objects.create(username=username, password=password, role='DEALER', dealer_name=firm)
+				user.custom_set_password(password)
+				user.role = 'DEALER'
+				user.save()
 
-			Activity.objects.create(
-				user=request.user,
-				action=f'Добавление дилера {user.username}',
-				ip=request.META['REMOTE_ADDR'],
-				place=ip_info(request.META['REMOTE_ADDR'])
-			)
+				Activity.objects.create(
+					user=request.user,
+					action=f'Добавление дилера {user.username}',
+					ip=request.META['REMOTE_ADDR'],
+					place=ip_info(request.META['REMOTE_ADDR'])
+				)
+			except:
+				return render(request, 'main/add_dealer.html', {'error': 'Ошибка создания пользователя, пользователь с таким именем пользователя уже существует!'})
 
-			return HttpResponseRedirect('/DEALER')
+			return HttpResponseRedirect('/dealers')
 
 		else:
 			return render(request, 'main/add_dealer.html')
@@ -285,9 +339,12 @@ def pricelist(request):
 	if request.method == 'GET':
 		products = [pw(x) for x in Product.objects.all()]
 
+		staff = request.user.role in ['ADMIN', 'MANAGER', 'SUPERMANAGER']
+
 		return render(request, 'main/pricelist.html', {
 			'update_date': update_date,
-			'products': products
+			'products': products,
+			'staff': staff
 		})
 
 	elif request.method == 'POST':
@@ -982,13 +1039,34 @@ def activity_stats(request):
 			self.user = user
 			self.count = Message.objects.filter(sender=user).count() + MessageDocument.objects.filter(sender=user).count()
 
+	class UserOrder:
+		def __init__(self, user):
+			self.user = user
+			self.count = Order.objects.filter(user=user).count()
+
 	data = []
 	msgs = []
+	orders = []
 	for user in users:
 		data.append(UserLogin(user))
 		msgs.append(UserMessageCounter(user))
+		orders.append(UserOrder(user))
 
 	return render(request, 'main/activity_stats.html', {
 		'logins': data,
-		'messages': msgs
+		'messages': msgs,
+		'orders': orders
 	})
+
+
+def delete_folder(request, fid):
+	if request.user.is_authenticated:
+		if request.method == 'GET':
+
+			folder = Folder.objects.get(id=fid)
+			parent = folder.parent_folder
+			folder.delete()
+
+			if parent:
+				return HttpResponseRedirect(f'/folders/{parent.id}')
+			return HttpResponseRedirect('files')

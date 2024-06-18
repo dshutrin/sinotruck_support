@@ -28,6 +28,7 @@
                 {% endfor %}
             </tbody>
         </table>
+
         <table class="my_table act-table">
             <thead>
                 <tr class="table-title"><th colspan="3">Использование чата</th></tr>
@@ -43,6 +44,26 @@
                         <td>{{ msg.user.role }}</td>
                         <td>{{ msg.user.username }}</td>
                         <td>{{ msg.count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="my_table act-table">
+            <thead>
+                <tr class="table-title"><th colspan="3">Оформление заказов</th></tr>
+                <tr>
+                    <th>Роль</th>
+                    <th>Имя пользователя</th>
+                    <th>Количественный показатель</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ord in orders %}
+                    <tr>
+                        <td>{{ ord.user.role }}</td>
+                        <td>{{ ord.user.username }}</td>
+                        <td>{{ ord.count }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

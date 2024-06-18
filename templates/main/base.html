@@ -32,7 +32,9 @@
                     <li><a href="/orders"><button>Заявки</button></a></li>
                 {% endif %}
                 <li><a href="/pricelist"><button>Прайс-лист</button></a></li>
-                <li><a href="/files"><button>Документы</button></a></li>
+                {% if request.user.role != 'CLIENT' %}
+                    <li><a href="/files"><button>Документы</button></a></li>
+                {% endif %}
                 {% if request.user.role == 'ADMIN' or request.user.role == 'SUPERMANAGER'  %}
                     <li><a href="/activity"><button>Активность</button></a></li>
                 {% endif %}

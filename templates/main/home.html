@@ -8,6 +8,11 @@
 {% block content %}
 
     {% if request.user.role == 'ADMIN' %}
+        
+    <div class="edit-my-account-block">
+        <a href="/edit_me">Настройки аккаунта</a>
+    </div>
+        
     <div class="home-info-blocks">
 
         {% if staff %}

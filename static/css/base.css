@@ -351,6 +351,7 @@ li > a > button {
 .home-info-blocks {
     display: grid;
     grid-template-columns: 33% 34% 33%;
+    margin-top: 1rem;
 }
 
 .managers-count, .DEALER-count, .clients-count, .my_task, .empty, .my_trash {
@@ -1227,15 +1228,6 @@ input[type=number] {
     background-color: rgba(47, 137, 255, 0.51);
 }
 
-.block-back-on-folder > a {
-    margin: 0.5rem;
-    padding: 0.3rem 1rem;
-    font-size: 20px;
-    background-color: #2f89ff;
-    color: white;
-    border-radius: 10px;
-}
-
 .find-activity-user-block > input {
     background-color: inherit;
     outline: 2px solid rgba(71, 71, 71, 0.76);
@@ -1258,4 +1250,92 @@ input[type=number] {
 .act-table {
     width: calc(100% - 1rem);
     margin: 0.5rem;
+}
+
+.errors-block {
+    margin-bottom: 1rem;
+    color: red;
+}
+
+.errors-block > span {
+    color: red;
+}
+
+.doc-delete {
+    text-align: end;
+}
+
+.block-back-on-folder {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.del-folder {
+    color: white;
+    background-color: #e35f5f;
+    border-radius: 7px;
+    padding: 0.2rem 1rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.back-folder {
+    color: white;
+    background-color: #2f89ff;
+    border-radius: 7px;
+    padding: 0.2rem 1rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.edit-my-account-block {
+    text-align: end;
+}
+
+.edit-my-account-block > a {
+    background-color: #2f89ff;
+    color: white;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    padding: 0.2rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.edit-admin-form {
+    width: 50%;
+    padding: 0 25%;
+}
+
+.input-block {
+    margin-bottom: 1rem;
+}
+
+.input-block > label {
+    width: calc(100% - 2rem);
+    font-size: 20px;
+}
+
+.input-block > input {
+    width: calc(100% - 2rem);
+    font-size: 20px;
+    background-color: inherit;
+    border-radius: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: 1rem;
+    padding: 0.3rem 1rem;
+}
+
+#save-admin-button {
+    width: 100%;
+    padding: 0.3rem 1rem;
+    color: white;
+    background-color: #2f89ff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 10px;
 }

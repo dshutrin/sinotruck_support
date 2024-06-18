@@ -9,7 +9,8 @@
         
         {% if back_link %}
             <div class="block-back-on-folder">
-                <a href="{{ back_link }}">Назад</a>
+                <a class="back-folder" href="{{ back_link }}">Назад</a>
+                <a class="del-folder" href="/folders/{{ folder.id }}/delete">Удалить текущую папку</a>
             </div>
         {% endif %}
 

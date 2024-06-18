@@ -16,6 +16,7 @@
 		<div id="main-body">
 			<img id="login-form-logo" src="{% static 'imgs/login_logo.png' %}" alt="">
 			<form id="login-form" method="POST">
+
 				<div class="form-block">
 					<input name="login" id="login" class="login-input" type="text">
 					<label for="login">Логин</label>
@@ -25,6 +26,12 @@
 					<input name="password" id="password" class="login-input" type="password">
 					<label for="password">Пароль</label>
 				</div>
+
+                {% if error %}
+                <div class="errors-block">
+                    <span class="error-span">{{ error }}</span>
+                </div>
+                {% endif %}
 
 				{% csrf_token %}
 				<button id="login_button" type="submit">Войти</button>
