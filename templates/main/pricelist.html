@@ -47,7 +47,7 @@
                     <th>Остаток</th>
                     <th>Марка</th>
                     <th>Цена</th>
-                    {% if staff %}
+                    {% if not staff %}
                         <th>Добавить в корзину</th>
                     {% endif %}
                 </tr>
@@ -80,7 +80,7 @@
                             {{ prod.product.price }}
                         {% endif %}
                     </td>
-                    {% if staff %}
+                    {% if not staff %}
                         <td class="cardtd">
                             {% if prod.saved %}
                                 <button id="prod-{{ prod.product.id }}" class="on_card_button" onclick="remove_from_trash({{ prod.product.id }})">

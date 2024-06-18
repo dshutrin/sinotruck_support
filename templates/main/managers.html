@@ -34,6 +34,32 @@
                         <td class="del-td">
                             <button type="button" class="mini-link chat_button" onclick="window.location.href = '/chat/{{ manager.id }}'">Chat</button>
                         </td>
+                        {% if request.user.role == 'ADMIN' %}
+                        <td class="del-td">
+                            <button type="button" class="mini-link history_button" onclick="window.location.href = '/user_history/{{ manager.id }}'">History</button>
+                        </td>
+                        <td class="del-td">
+                            <button type="button" class="mini-link rm_button" onclick="show_confirm_delete_user_modal({{ manager.id }})">Delete</button>
+                        </td>
+                        <td class="del-td">
+                            <a class="mini-link edit_button" href="/edituser/{{ manager.id }}">Edit</a>
+                        </td>
+                        {% endif %}
+                        <td>{{ manager.username }}</td>
+                        <td>{{ manager.name }} {{ manager.surname }}</td>
+                        <td>{{ manager.clear_password }}</td>
+                        <td>
+                            {% if manager.sub_role %}
+                                {{ manager.sub_role }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <!--{% for manager in supermanagers %}
+                    <tr class="supermanager-tr">
+                        <td class="del-td">
+                            <button type="button" class="mini-link chat_button" onclick="window.location.href = '/chat/{{ manager.id }}'">Chat</button>
+                        </td>
                         <td class="del-td">
                             <button type="button" class="mini-link history_button" onclick="window.location.href = '/user_history/{{ manager.id }}'">History</button>
                         </td>
@@ -54,31 +80,7 @@
                             {% endif %}
                         </td>
                     </tr>
-                {% endfor %}
-                {% for manager in supermanagers %}
-                    <tr class="supermanager-tr">
-                        <td class="del-td">
-                            <button type="button" class="mini-link chat_button" onclick="window.location.href = '/chat/{{ manager.id }}'">Chat</button>
-                        </td>
-                        <td class="del-td">
-                            <button type="button" class="mini-link history_button" onclick="window.location.href = '/user_history/{{ manager.id }}'">History</button>
-                        </td>
-                        <td class="del-td">
-                            <button type="button" class="mini-link rm_button" onclick="show_confirm_delete_user_modal({{ manager.id }})">Delete</button>
-                        </td>
-                        <td class="del-td">
-                            <a class="mini-link edit_button" href="/edituser/{{ manager.id }}">Edit</a>
-                        </td>
-                        <td>{{ manager.username }}</td>
-                        <td>{{ manager.name }} {{ manager.surname }}</td>
-                        <td>{{ manager.clear_password }}</td>
-                        <td>
-                            {% if manager.sub_role %}
-                                {{ manager.sub_role }}
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
+                {% endfor %}-->
             </tbody>
         </table>
     {% else %}

@@ -22,13 +22,13 @@
             <ul>
                 <li><a href="/"><button>Главная</button></a></li>
             
-                {% if request.user.role == 'ADMIN' or request.user.role == 'SUPERMANAGER' or request.user.role == 'MANAGER' %}
+                {% if request.user.role == 'ADMIN' or request.user.role == 'SUPERMANAGER' %}
                     <li><a href="/managers"><button>Менеджеры</button></a></li>
                     <li><a href="/dealers"><button>Дилеры</button></a></li>
                     <li><a href="/clients"><button>Клиенты</button></a></li>
                 {% endif %}
                 <li><a href="/contacts"><button>Контакты</button></a></li>
-                {% if request.user.role == 'MANAGER' or request.user.role == 'SUPERMANAGER'  %}
+                {% if request.user.role == 'MANAGER' or request.user.role == 'SUPERMANAGER' or request.user.role == 'ADMIN' %}
                     <li><a href="/orders"><button>Заявки</button></a></li>
                 {% endif %}
                 <li><a href="/pricelist"><button>Прайс-лист</button></a></li>

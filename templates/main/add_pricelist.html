@@ -12,6 +12,13 @@
             <input id="excel_file" name="excel_file" type="file">
 
             {% csrf_token %}
+
+            {% if error %}
+                <div class="errors-block">
+                    <span class="error-span">{{ error }}</span>
+                </div>
+            {% endif %}
+
             <button id="excel-button" type="submit">Отправить</button>
         </form>
         <div class="filler"></div>

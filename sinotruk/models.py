@@ -155,6 +155,7 @@ class ProductOnTrash(models.Model):
 class Order(models.Model):
 	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name='Заказчик', related_name='orderer')
 	date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+	complete = models.BooleanField(default=False)
 
 
 class OrderItem(models.Model):

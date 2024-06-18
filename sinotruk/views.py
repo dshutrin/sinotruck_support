@@ -140,7 +140,9 @@ def home(request):
 			'DEALER_count': CustomUser.objects.filter(role='DEALER').count(),
 			'clients_count': CustomUser.objects.filter(role='CLIENT').count(),
 			'chats': chats,
-			'staff': request.user.role in ['ADMIN', 'MAGAER', 'SUPERMANAGER']
+			'first_line': request.user.role in ['MANAGER', 'SUPERMANAGER', 'ADMIN'],
+			'task_need': request.user.role in ['MANAGER', 'SUPERMANAGER', 'ADMIN'],
+			'trash_order': request.user.role in ['DEALER', 'CLIENT']
 		})
 
 	return HttpResponseRedirect('/login')
@@ -387,64 +389,70 @@ def add_pricelist(request):
 		f = request.FILES["excel_file"]
 		end = request.FILES["excel_file"].name.split(".")[-1]
 
-		with open(f'{settings.BASE_DIR}/media/pricelist/file.{end}', 'wb+') as destination:
-			for chunk in f.chunks():
-				destination.write(chunk)
+		if end in ['xlsx', 'xls']:
 
-		fix_excel(f'{settings.BASE_DIR}/media/pricelist/file.{end}')
+			with open(f'{settings.BASE_DIR}/media/pricelist/file.{end}', 'wb+') as destination:
+				for chunk in f.chunks():
+					destination.write(chunk)
 
-		excel = openpyxl.load_workbook(f'{settings.BASE_DIR}/media/pricelist/file.{end}')
-		sheet = excel.active
+			fix_excel(f'{settings.BASE_DIR}/media/pricelist/file.{end}')
 
-		rows = []
-		for r in sheet.rows:
-			rows.append([])
-			for cell in r:
-				rows[-1].append(cell.value)
+			excel = openpyxl.load_workbook(f'{settings.BASE_DIR}/media/pricelist/file.{end}')
+			sheet = excel.active
 
-		start_index = 0
-		for i in range(len(rows)):
-			if 'Номенклатура.Артикул' in [str(x).strip() for x in rows[i] if x]:
-				start_index = i
-				break
+			rows = []
+			for r in sheet.rows:
+				rows.append([])
+				for cell in r:
+					rows[-1].append(cell.value)
 
-		dt = [str(x).strip() for x in rows[start_index]]
-		sn = dt.index('Номенклатура.Артикул')
-		name = dt.index('Ценовая группа/ Номенклатура')
-		ost = dt.index('Остаток')
-		mrk = dt.index('Марки')
-		prc = dt.index('Дилер')
+			start_index = 0
+			for i in range(len(rows)):
+				if 'Номенклатура.Артикул' in [str(x).strip() for x in rows[i] if x]:
+					start_index = i
+					break
 
-		Product.objects.all().delete()
-		for row in rows[start_index+1:]:
-			sn_ = row[sn]
-			if sn_:
-				name_ = row[name]
-				ost_ = str(row[ost])
-				if ost_.isdigit():
-					ost_ = int(ost_)
+			dt = [str(x).strip() for x in rows[start_index]]
+			sn = dt.index('Номенклатура.Артикул')
+			name = dt.index('Ценовая группа/ Номенклатура')
+			ost = dt.index('Остаток')
+			mrk = dt.index('Марки')
+			prc = dt.index('Дилер')
 
-				mrk_ = row[mrk]
-				prc_ = str(row[prc]).replace('руб.', '').strip()
-				if prc_.replace('.', '').isdigit():
-					prc_ = float(prc_)
+			Product.objects.all().delete()
+			for row in rows[start_index+1:]:
+				sn_ = row[sn]
+				if sn_:
+					name_ = row[name]
+					ost_ = str(row[ost])
+					if ost_.isdigit():
+						ost_ = int(ost_)
 
-				Product.objects.create(
-					serial_number=sn_,
-					name=name_,
-					count=ost_,
-					price=prc_,
-					mark=mrk_
-				)
+					mrk_ = row[mrk]
+					prc_ = str(row[prc]).replace('руб.', '').strip()
+					if prc_.replace('.', '').isdigit():
+						prc_ = float(prc_)
 
-		Activity.objects.create(
-			user=request.user,
-			action=f'Обновление прайс-листа',
-			ip=request.META['REMOTE_ADDR'],
-			place=ip_info(request.META['REMOTE_ADDR'])
-		)
+					Product.objects.create(
+						serial_number=sn_,
+						name=name_,
+						count=ost_,
+						price=prc_,
+						mark=mrk_
+					)
 
-		return HttpResponseRedirect('/pricelist')
+			Activity.objects.create(
+				user=request.user,
+				action=f'Обновление прайс-листа',
+				ip=request.META['REMOTE_ADDR'],
+				place=ip_info(request.META['REMOTE_ADDR'])
+			)
+
+			return HttpResponseRedirect('/pricelist')
+		else:
+			return render(request, 'main/add_pricelist.html', {
+				'error': 'Недопустимый тип файла!'
+			})
 	return render(request, 'main/add_pricelist.html')
 
 
@@ -490,7 +498,9 @@ def folder_detail(request, fid):
 		'files': files_,
 		'folder': folder,
 		'folders': Folder.objects.filter(parent_folder=folder),
-		'back_link': back_link
+		'back_link': back_link,
+		'staff': request.user.role not in ['DEALER', 'CLIENT'],
+		'can_delete': request.user.role not in ['DEALER', 'CLIENT']
 	})
 
 
@@ -806,17 +816,28 @@ def load_activity_file(request):
 
 		data = {}
 
-		start = datetime.strptime(request.POST['start'], '%Y-%m-%d').date()
-		end = datetime.strptime(request.POST['end'], '%Y-%m-%d').date()
+		if request.POST['start'] and request.POST['end']:
+			start = datetime.strptime(request.POST['start'], '%Y-%m-%d').date()
+			end = datetime.strptime(request.POST['end'], '%Y-%m-%d').date()
 
-		for el in request.POST:
-			if request.POST[el].isdigit():
-				user = CustomUser.objects.get(id=int(request.POST[el]))
+			for el in request.POST:
+				if request.POST[el].isdigit():
+					user = CustomUser.objects.get(id=int(request.POST[el]))
 
-				if user in data:
-					data[user] += [x for x in Activity.objects.filter(user=user, time__gte=start, time__lte=end)]
-				else:
-					data[user] = [x for x in Activity.objects.filter(user=user, time__gte=start, time__lte=end)]
+					if user in data:
+						data[user] += [x for x in Activity.objects.filter(user=user, time__gte=start, time__lte=end)]
+					else:
+						data[user] = [x for x in Activity.objects.filter(user=user, time__gte=start, time__lte=end)]
+
+		else:
+			for el in request.POST:
+				if request.POST[el].isdigit():
+					user = CustomUser.objects.get(id=int(request.POST[el]))
+
+					if user in data:
+						data[user] += [x for x in Activity.objects.filter(user=user)]
+					else:
+						data[user] = [x for x in Activity.objects.filter(user=user)]
 
 		wb = Workbook()
 		ws1 = wb.active
@@ -1070,3 +1091,32 @@ def delete_folder(request, fid):
 			if parent:
 				return HttpResponseRedirect(f'/folders/{parent.id}')
 			return HttpResponseRedirect('files')
+
+
+def make_order_as_complete(request, order_id):
+	if request.user.is_authenticated:
+		if request.user.role in ['MANAGER', 'SUPERMANAGER', 'ADMIN']:
+
+			order = Order.objects.get(id=order_id)
+			order.complete = True
+			order.save()
+
+			return HttpResponseRedirect(f'/orders')
+
+	return HttpResponseRedirect('/')
+
+
+def delete_document(request, doc_id):
+	if request.user.is_authenticated:
+
+		doc = Document.objects.get(id=doc_id)
+		link = None
+
+		if doc.folder:
+			link = f'/folders/{doc.folder.id}'
+		else:
+			link = '/files'
+
+		doc.delete()
+
+		return HttpResponseRedirect(link)

@@ -2,7 +2,24 @@
 {% load static %}
 
 {% block navbar %}
-    <h1>Чат с пользователем {{ recipient.username }}</h1>
+    <h1>
+        Чат с пользователем {{ recipient.username }}
+        {% if recipient.role == 'ADMIN' %}
+            ( АДМИН )
+        {% endif %}
+        {% if recipient.role == 'MANAGER' %}
+            Менеджер ( {{ recipient.name }} {{ recipient.surname }} {{ recipient.sub_role }} )
+        {% endif %}
+        {% if recipient.role == 'SUPERMANAGER' %}
+            Менеджер ( {{ recipient.name }} {{ recipient.surname }} {{ recipient.sub_role }} )
+        {% endif %}
+        {% if recipient.role == 'DEAlER' %}
+            Дилер ( {{ recipient.dealer_name }} )
+        {% endif %}
+        {% if recipient.role == 'CLIENT' %}
+            Клиент ( {{ recipient.name }} {{ recipient.surname }} )
+        {% endif %}
+    </h1>
 {% endblock %}
 
 {% block content %}

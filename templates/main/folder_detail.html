@@ -10,25 +10,27 @@
         {% if back_link %}
             <div class="block-back-on-folder">
                 <a class="back-folder" href="{{ back_link }}">Назад</a>
-                <a class="del-folder" href="/folders/{{ folder.id }}/delete">Удалить текущую папку</a>
             </div>
         {% endif %}
 
         <div class="files-block">
 
             {% for folder in folders %}
-                <a class="doc" href="/folders/{{ folder.id }}">
+                <div class="doc">
                     <div class="doc-image">
                         <img src="{% static 'imgs/folder.png' %}" alt="">
                     </div>
                     <div class="doc-title">
                         {{ folder.name }}
                     </div>
-                </a>
+                    <a href="/folders/{{ folder.id }}">Открыть</a>
+                    {% if can_delete %}
+                        <a class="rlink" href="/folders/{{ folder.id }}/delete">Удалить</a>
+                    {% endif %}
+                </div>
             {% endfor %}
-
             {% for doc in files %}
-                <a class="doc" target="_blank" href="/files/{{ doc.id }}">
+                <div class="doc">
                     <div class="doc-image">
                         {% if doc.file_type == 'pdf' %}
                             <img src="{% static 'imgs/pdf.png' %}" alt="">
@@ -49,9 +51,15 @@
                     <div class="doc-title">
                         {{ doc.title }}
                     </div>
-                </a>
+                    <a target="_blank" href="/files/{{ doc.id }}">Открыть</a>
+                    {% if can_delete %}
+                        <a class="rlink" href="/files/{{ doc.id }}/delete">Удалить</a>
+                    {% endif %}
+                </div>
             {% endfor %}
 
+
+            {% if staff %}
             <a class="doc-additional" href="/folders/{{ folder.id }}/add_folder">
                 <div class="doc-title">
                     Добавить папку
@@ -63,6 +71,7 @@
                     Добавить документ
                 </div>
             </a>
+            {% endif %}
 
         </div>
 

@@ -14,6 +14,7 @@
                 <tr>
                     <th>№ заказа</th>
                     <th>Дата</th>
+                    <th>Статус</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,17 @@
                     <tr class="order-tr" onclick="window.location.href='/orders/my/{{ order.id }}'">
                         <td>#{{ order.id }}</td>
                         <td>{{ order.date }}</td>
+                        <td>
+                            {% if order.complete %}
+                                <span class="completed">
+                                    Выполнен
+                                </span>
+                            {% else %}
+                                <span class="not_completed">
+                                    Не выполнен
+                                </span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

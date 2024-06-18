@@ -11,19 +11,21 @@
 
         {% if folders_count > 0 %}
             {% for folder in folders %}
-                <a class="doc" href="/folders/{{ folder.id }}">
+                <div class="doc">
                     <div class="doc-image">
                         <img src="{% static 'imgs/folder.png' %}" alt="">
                     </div>
                     <div class="doc-title">
                         {{ folder.name }}
                     </div>
-                </a>
+                    <a href="/folders/{{ folder.id }}">Открыть</a>
+                    <a class="rlink" href="/folders/{{ folder.id }}/delete">Удалить</a>
+                </div>
             {% endfor %}
         {% endif %}
         {% if files_count > 0 %}
             {% for doc in files %}
-                <a class="doc" target="_blank" href="/files/{{ doc.id }}">
+                <div class="doc">
                     <div class="doc-image">
                         {% if doc.file_type == 'pdf' %}
                             <img src="{% static 'imgs/pdf.png' %}" alt="">
@@ -44,7 +46,9 @@
                     <div class="doc-title">
                         {{ doc.title }}
                     </div>
-                </a>
+                    <a target="_blank" href="/files/{{ doc.id }}">Открыть</a>
+                    <a class="rlink" href="/files/{{ doc.id }}/delete">Удалить</a>
+                </div>
             {% endfor %}
         {% endif %}
         

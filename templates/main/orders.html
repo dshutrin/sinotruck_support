@@ -16,6 +16,7 @@
                     <th>Дата оформления</th>
                     <th>Заказчик</th>
                     <th>Общая стоимость</th>
+                    <th>Статус</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +26,17 @@
                         <td>{{ ord.order.date }}</td>
                         <td>{{ ord.order.user.username }}</td>
                         <td>{{ ord.total_price }}₽</td>
+                        <td>
+                            {% if ord.order.complete %}
+                                <span class="completed">
+                                    Выполнен
+                                </span>
+                            {% else %}
+                                <span class="not_completed">
+                                    Не выполнен
+                                </span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

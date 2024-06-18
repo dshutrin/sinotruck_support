@@ -2,57 +2,60 @@
 {% load static %}
 
 {% block navbar %}
-    <h1>Главная</h1>
+    <h1>Главная ({{ request.user.username }} <span class="ml-3">{{ request.user.role }}</span>)</h1>
 {% endblock %}
 
 {% block content %}
 
     {% if request.user.role == 'ADMIN' %}
-        
     <div class="edit-my-account-block">
         <a href="/edit_me">Настройки аккаунта</a>
     </div>
-        
+    {% endif %}
+
     <div class="home-info-blocks">
 
-        {% if staff %}
-            <div class="managers-count">
-                <h2>Количество менеджеров: {{ managers_count }}</h2>
-            </div>
-            <div class="DEALER-count">
-                <h2>Количество дилеров: {{ DEALER_count }}</h2>
-            </div>
-            <div class="clients-count">
-                <h2>Количество клиентов: {{ clients_count }}</h2>
-            </div>
+        {% if first_line %}
+        <div class="managers-count">
+            <h2>Количество менеджеров: {{ managers_count }}</h2>
+        </div>
+        <div class="DEALER-count">
+            <h2>Количество дилеров: {{ DEALER_count }}</h2>
+        </div>
+        <div class="clients-count">
+            <h2>Количество клиентов: {{ clients_count }}</h2>
+        </div>
         {% endif %}
-
-        {% if not staff %}
-            <div id="my_task" class="my_task">
-                <h2>
-                    <input
-                            id="my_task_input"
-                            class="user-sub-role-input"
-                            type="text"
-                            {% if request.user.sub_role %}
-                                value="{{ request.user.sub_role }}"
-                            {% else %}
-                                placeholder="Введите свою задачу"
-                            {% endif %}
-                            onchange="update_my_task()"
-                    >
-                </h2>
-            </div>
-            <a href="/orders/my" class="empty my_order-link">
-                Мои заказы
-            </a>
-            <a href="/my_trash" class="my_trash">
-                <h2>Моя корзина</h2>
-            </a>
+        
+        {% if task_need %}
+        <div id="my_task" class="my_task">
+            <h2>
+                <input
+                        id="my_task_input"
+                        class="user-sub-role-input"
+                        type="text"
+                        {% if request.user.sub_role %}
+                            value="{{ request.user.sub_role }}"
+                        {% else %}
+                            placeholder="Введите свою задачу"
+                        {% endif %}
+                        onchange="update_my_task()"
+                >
+            </h2>
+        </div>
+        {% endif %}
+        {% if trash_order %}
+        <a href="/orders/my" class="empty my_order-link">
+            Мои заказы
+        </a>
+        <a href="/my_trash" class="my_trash">
+            <h2>Моя корзина</h2>
+        </a>
         {% endif %}
 
     </div>
-    {% endif %}
+
+
 
     <div class="chats-block">
         <h1>Мои чаты</h1>

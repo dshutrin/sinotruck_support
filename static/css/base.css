@@ -170,7 +170,15 @@ li > a > button {
 }
 
 .content::-webkit-scrollbar {
-    width: 7px;
+  width: 12px;               /* ширина scrollbar */
+}
+.content::-webkit-scrollbar-track {
+  background: #3a3a3a;        /* цвет дорожки */
+}
+.content::-webkit-scrollbar-thumb {
+  background-color: #aeaeae;    /* цвет плашки */
+  border-radius: 20px;       /* закругления плашки */
+  border: 3px solid #3a3a3a;  /* padding вокруг плашки */
 }
 
 .add-manager-block {
@@ -1338,4 +1346,41 @@ input[type=number] {
     cursor: pointer;
     font-size: 20px;
     border-radius: 10px;
+}
+
+#make_order_compl {
+    padding: 0.3rem 1rem;
+    color: white;
+    background-color: #2f89ff;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.divv {
+    margin-top: 1rem;
+}
+
+.not_completed {
+    color: #2f89ff;
+}
+
+.completed {
+    color: #6da119;
+}
+
+.ml-3 {
+    margin-left: 1rem;
+}
+
+.rlink {
+    text-align: end;
+    width: 50%;
+    margin-left: 50%;
+}
+
+.doc > a {
+    margin-top: 1rem;
 }

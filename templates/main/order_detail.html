@@ -51,6 +51,12 @@
             </tbody>
         </table>
 
+        {% if not order.complete %}
+            <div class="divv">
+                <a id="make_order_compl" href="/orders/{{ order.id }}/make_as_complete">Пометить выполненным</a>
+            </div>
+        {% endif %}
+
     </div>
 
 {% endblock %}
