@@ -118,6 +118,7 @@ def edit_me(request):
 
 
 def home(request):
+
 	if request.user.is_authenticated:
 
 		class Chat:
@@ -555,13 +556,32 @@ def update_user_task(request):
 		if request.method == 'POST':
 
 			request.user.sub_role = request.POST.get('task')
-
-			print(request.POST.get('task'))
-
 			request.user.save()
 
 			return JsonResponse({}, status=200)
 
+		else:
+			return JsonResponse({}, status=500)
+	else:
+		return JsonResponse({}, status=500)
+
+
+@csrf_exempt
+def update_user_receiver(request):
+	if request.user.is_authenticated:
+		if request.user.role == 'MANAGER':
+			if request.method == 'POST':
+
+				request.user.receive_emails = {
+					'true': True,
+					'false': False
+				}[request.POST.get('value')]
+				request.user.save()
+
+				return JsonResponse({}, status=200)
+
+			else:
+				return JsonResponse({}, status=500)
 		else:
 			return JsonResponse({}, status=500)
 	else:
@@ -951,6 +971,8 @@ def add_order(request):
 		for el in prods:
 			OrderItem.objects.create(order=order, product=el[0], count=el[1])
 
+		send_emails_to_managers(order)
+
 		ProductOnTrash.objects.filter(user=request.user).delete()
 
 		return JsonResponse({}, status=200)
@@ -962,15 +984,15 @@ def add_order(request):
 def my_orders(request):
 	if request.user.is_authenticated:
 
-		class OrderView:
-			def __init__(self, order):
-				self.order = order
-				self.items = OrderItem.objects.filter(order=order)
-
-		orders = [OrderView(x) for x in Order.objects.filter(user=request.user)]
+		#class OrderView:
+		#	def __init__(self, order):
+		#		self.order = order
+		#		self.items = OrderItem.objects.filter(order=order)
+		#
+		#orders = [OrderView(x) for x in Order.objects.filter(user=request.user)]
 
 		return render(request, 'main/my_orders.html', {
-			'orders': Order.objects.filter(user=request.user)
+			'orders': Order.objects.filter(user=request.user).order_by('-id')
 		})
 
 	return HttpResponseRedirect('/login')

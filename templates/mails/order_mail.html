@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказ на сайте SinotrukSupport</title>
+
+    <style>
+        table, thead, tbody, tr, th, td {
+            border-collapse: collapse;
+            border: 2px solid #233953;
+        }
+        thead {
+            background-color: rgba(92, 136, 186, 0.7);
+        }
+        tbody > tr {
+            background-color: rgba(118, 152, 189, 0.7);
+        }
+        td, th {
+            padding: 0.3rem 1rem;
+        }
+    </style>
+
+</head>
+<body>
+
+    <h1>Новый заказ от пользователя {{ username }}</h1>
+    <h3>ID заказа: {{ order_id }}</h3>
+
+    <h3>Детали заказа:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Серийный номер</th>
+                <th>Наименование</th>
+                <th>Марка</th>
+                <th>Кол-во</th>
+                <th>Цена за 1шт., ₽</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.product.serial_number }}</td>
+                    <td>{{ product.product.name }}</td>
+                    <td>
+                        {% if product.product.mark %}
+                            {{ product.product.mark }}
+                        {% endif %}
+                    </td>
+                    <td>{{ product.count }}</td>
+                    <td>{{ product.product.price }}₽</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4"></td>
+                <td>{{ sum_price }}₽</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

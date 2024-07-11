@@ -7,6 +7,7 @@ urlpatterns = [
     path('login', login_view),
     path('logout', logout_view),
     path('users/update_task', update_user_task),
+    path('users/update_receiver', update_user_receiver),
     path('edit_me', edit_me),
     path('orders/<int:order_id>/make_as_complete', make_order_as_complete),
 

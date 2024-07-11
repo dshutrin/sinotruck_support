@@ -28,6 +28,8 @@ class CustomUser(AbstractBaseUser):
 	sub_role = models.CharField(verbose_name='Задача', max_length=100, null=True, default=None, blank=True)
 	dealer_name = models.CharField(verbose_name='Фирма', max_length=255, null=True, default=None, blank=True)
 
+	receive_emails = models.BooleanField(default=False, verbose_name='Разрешение на принятие заявок')
+
 	objects = CustomUserManager()
 	USERNAME_FIELD = 'username'
 

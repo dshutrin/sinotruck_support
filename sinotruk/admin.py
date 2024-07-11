@@ -5,7 +5,7 @@ from .models import *
 # Register your models here.
 @admin.register(CustomUser)
 class Admin(admin.ModelAdmin):
-    list_display = ('username', )
+    list_display = ('username', 'role', 'email')
 
 
 @admin.register(Document)

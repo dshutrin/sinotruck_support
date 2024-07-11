@@ -41,12 +41,10 @@ class EditManagerForm(EditUserForm):
 
 
 class EditDealerForm(EditUserForm):
-
-
     class Meta:
         model = CustomUser
         exclude = (
-            'password', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'email', 'sub_role'
+            'password', 'is_active', 'is_staff', 'is_superuser', 'last_login', 'date_joined', 'email', 'sub_role', 'receive_emails'
         )
 
 

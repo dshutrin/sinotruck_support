@@ -29,7 +29,7 @@
         
         {% if task_need %}
         <div id="my_task" class="my_task">
-            <h2>
+            <h2 style="width: 80%">
                 <input
                         id="my_task_input"
                         class="user-sub-role-input"
@@ -51,6 +51,21 @@
         <a href="/my_trash" class="my_trash">
             <h2>Моя корзина</h2>
         </a>
+        {% endif %}
+        {% if request.user.role == 'MANAGER' %}
+            <div class="clients-count" id="receiver-block">
+                <h2>
+                    Принимать заявки:
+                    <input
+                        id="receiver"
+                        type="checkbox"
+                        {% if request.user.receive_emails %}
+                            checked="checked"
+                        {% endif %}
+                        onchange="update_my_receiver()"
+                    >
+                </h2>
+            </div>
         {% endif %}
 
     </div>
