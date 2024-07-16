@@ -36,7 +36,7 @@ def send_emails_to_managers(order):
 
     products = OrderItem.objects.filter(order=order)
 
-    message_body = f"""Новый заказ от пользователя {order.user.username}\n\n№Заказа: {order.id}\n\nДетали заказа:\n"""
+    message_body = f"""Новый заказ от пользователя {order.user.username} ({order.user.email})\n\n№Заказа: {order.id}\n\nДетали заказа:\n"""
     sum_price = 0
 
     for product in products:
