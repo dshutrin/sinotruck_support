@@ -36,7 +36,17 @@ def send_emails_to_managers(order):
 
     products = OrderItem.objects.filter(order=order)
 
-    message_body = f"""Новый заказ от пользователя {order.user.username} ({order.user.email})\n\n№Заказа: {order.id}\n\nДетали заказа:\n"""
+    email = 'Почта заказчика не указана'
+    if order.user.email:
+        email = order.user.email
+
+    name = 'Имя не указано'
+    if order.user.role == 'DEALER':
+        name = order.user.dealer_name
+    else:
+        name = order.user.first_name + ' ' + order.user.last_name
+
+    message_body = f"""Новый заказ от пользователя {order.user.username} ({email}) ({name})\n\n№Заказа: {order.id}\n\nДетали заказа:\n"""
     sum_price = 0
 
     for product in products:
@@ -48,7 +58,9 @@ def send_emails_to_managers(order):
         'products': products,
         'username': order.user.username,
         'order_id': order.id,
-        'sum_price': sum_price
+        'sum_price': sum_price,
+        'name': name,
+        'email': email
     })
 
     for manager in managers:
@@ -56,6 +68,6 @@ def send_emails_to_managers(order):
             subject='Новый заказ на сайте SinotrukSupport',
             message=message_body,
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[manager.email],
+            recipient_list=['mrtigerdap@gmail.com'],
             html_message=html_message
         )
