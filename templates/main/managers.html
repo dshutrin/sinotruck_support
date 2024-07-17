@@ -25,7 +25,9 @@
                 {% endif %}
                 <th>Имя пользователя</th>
                 <th>Имя, Фамилия</th>
-                <th>Пароль</th>
+                {% if request.user.role == 'ADMIN' %}
+                    <th>Пароль</th>
+                {% endif %}
                 <th>Задача</th>
                 <th>Принимает заявки на почту</th>
             </tr></thead>
@@ -51,7 +53,9 @@
                         {% endif %}
                         <td>{{ manager.username }}</td>
                         <td>{{ manager.name }} {{ manager.surname }}</td>
-                        <td>{{ manager.clear_password }}</td>
+                        {% if request.user.role == 'ADMIN' %}
+                            <td>{{ manager.clear_password }}</td>
+                        {% endif %}
                         <td>
                             {% if manager.sub_role %}
                                 {{ manager.sub_role }}

@@ -64,10 +64,11 @@ def send_emails_to_managers(order):
     })
 
     for manager in managers:
-        send_mail(
-            subject='Новый заказ на сайте SinotrukSupport',
-            message=message_body,
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=['mrtigerdap@gmail.com'],
-            html_message=html_message
-        )
+        if manager.email:
+            send_mail(
+                subject='Новый заказ на сайте SinotrukSupport',
+                message=message_body,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[manager.email],
+                html_message=html_message
+            )

@@ -712,8 +712,12 @@ def edit_user(request, user_id):
 
 	if request.method == 'GET':
 		if user.role == 'MANAGER':
-			form = EditManagerForm(instance=user)
-			return render(request, 'main/edit_user.html', {'user': user, 'form': form})
+			if request.user.role == 'ADMIN':
+				form = EditManagerForm(instance=user)
+				return render(request, 'main/edit_user.html', {'user': user, 'form': form})
+			if request.user.role == 'SUPERMANAGER':
+				form = EditSuperManagerForm(instance=user)
+				return render(request, 'main/edit_user.html', {'user': user, 'form': form})
 		elif user.role == 'DEALER':
 			form = EditDealerForm(instance=user)
 			return render(request, 'main/edit_user.html', {'user': user, 'form': form})

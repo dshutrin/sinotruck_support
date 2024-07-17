@@ -40,6 +40,18 @@ class EditManagerForm(EditUserForm):
         )
 
 
+class EditSuperManagerForm(EditUserForm):
+    class Meta:
+        model = CustomUser
+        exclude = (
+            'password', 'is_active', 'is_staff',
+            'is_superuser', 'last_login', 'date_joined',
+            'email', 'dealer_name', 'username',
+            'name', 'surname', 'clear_password',
+            'role'
+        )
+
+
 class EditDealerForm(EditUserForm):
     class Meta:
         model = CustomUser
